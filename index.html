@@ -692,7 +692,11 @@
                 eurusd: document.getElementById('toggle-eurusd').checked,
                 gold: document.getElementById('toggle-gold').checked
             };
-            Telegram.WebApp.sendData(JSON.stringify(payload));
+            try {
+                Telegram.WebApp.sendData(JSON.stringify(payload));
+            } catch (err) {
+                alert("⚠️ Action non disponible depuis ce bouton.\n\nVeuillez ouvrir le tableau de bord en cliquant sur le bouton permanent '📱 Ouvrir Master Panel' situé sur le clavier tout en bas de votre écran de chat pour pouvoir appliquer vos changements !");
+            }
         });
 
         // Live Broker MT5 Clock (EET/EEST) & Highlight Active Hour
