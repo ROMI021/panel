@@ -224,7 +224,7 @@
         }
 
         .stat-value {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
             color: var(--text-primary);
         }
@@ -311,6 +311,7 @@
             border-top: none;
             border-bottom-left-radius: 12px;
             border-bottom-right-radius: 12px;
+            overflow-x: auto;
         }
 
         .accordion-row {
@@ -331,6 +332,61 @@
 
         .accordion-row span:last-child {
             font-weight: 700;
+        }
+
+        /* Glassmorphic Tables */
+        .glass-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            text-align: left;
+            min-width: 320px;
+        }
+
+        .glass-table th {
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding: 8px;
+        }
+
+        .glass-table td {
+            padding: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            font-weight: 500;
+        }
+
+        .glass-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .text-green { color: var(--accent-green) !important; }
+        .text-red { color: var(--accent-red) !important; }
+        .text-bold { font-weight: 700 !important; }
+
+        /* Prop Firm Challenge Badges */
+        .challenge-badge {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--glass-border);
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+        .challenge-badge.success {
+            background: rgba(16, 185, 129, 0.08);
+            border-color: var(--accent-green);
+        }
+
+        .challenge-badge.pending {
+            background: rgba(245, 158, 11, 0.08);
+            border-color: var(--accent-gold);
         }
 
         /* Close Button Group */
@@ -425,6 +481,23 @@
         </div>
     </div>
 
+    <!-- Prop Firm Challenge Status -->
+    <div class="glass-card">
+        <label class="form-label">🏆 Statut du Challenge Prop Firm (Compte 10k$)</label>
+        <div id="challenge-phase1" class="challenge-badge">
+            <span>🎯 <strong>Phase 1</strong> (Objectif +10% / +1,000 $)</span>
+            <span id="badge-p1">-</span>
+        </div>
+        <div id="challenge-phase2" class="challenge-badge">
+            <span>🎯 <strong>Phase 2</strong> (Objectif +5% / +500 $)</span>
+            <span id="badge-p2">-</span>
+        </div>
+        <div id="challenge-funded" class="challenge-badge">
+            <span>🛡️ <strong>Compte Financé Réel</strong></span>
+            <span id="badge-funded">-</span>
+        </div>
+    </div>
+
     <!-- Equity Curve Chart -->
     <div class="glass-card chart-card">
         <div class="chart-header">
@@ -468,13 +541,142 @@
         </div>
     </div>
 
+    <!-- 1. Performance Mensuelle Accordion -->
+    <div class="accordion">
+        <div class="accordion-header" onclick="toggleAccordion('monthly')">
+            <span>🗓️ Tableau des Performances Mensuelles</span>
+            <i class="fa-solid fa-chevron-down" id="arrow-monthly"></i>
+        </div>
+        <div class="accordion-content" id="content-monthly">
+            <table class="glass-table">
+                <thead>
+                    <tr>
+                        <th>Mois</th>
+                        <th>PnL ($)</th>
+                        <th>Rendement / Initial</th>
+                        <th>Rendement Composé</th>
+                        <th>Trades</th>
+                        <th>Solde Fin</th>
+                    </tr>
+                </thead>
+                <tbody id="table-monthly-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 2. Performance par Stratégie Accordion -->
+    <div class="accordion">
+        <div class="accordion-header" onclick="toggleAccordion('strategy')">
+            <span>🤖 Répartition de la Performance par Stratégie</span>
+            <i class="fa-solid fa-chevron-down" id="arrow-strategy"></i>
+        </div>
+        <div class="accordion-content" id="content-strategy">
+            <table class="glass-table">
+                <thead>
+                    <tr>
+                        <th>Stratégie</th>
+                        <th>Actif</th>
+                        <th>Trades</th>
+                        <th>Wins</th>
+                        <th>BE</th>
+                        <th>Loss</th>
+                        <th>PnL NET</th>
+                        <th>Win Rate</th>
+                    </tr>
+                </thead>
+                <tbody id="table-strategy-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 3. Performance par Jour de la Semaine Accordion -->
+    <div class="accordion">
+        <div class="accordion-header" onclick="toggleAccordion('weekday')">
+            <span>📅 Répartition par Jour de la Semaine</span>
+            <i class="fa-solid fa-chevron-down" id="arrow-weekday"></i>
+        </div>
+        <div class="accordion-content" id="content-weekday">
+            <table class="glass-table">
+                <thead>
+                    <tr>
+                        <th>Jour</th>
+                        <th>Wins</th>
+                        <th>Loss</th>
+                        <th>BE</th>
+                        <th>Win Rate</th>
+                        <th>PnL NET</th>
+                    </tr>
+                </thead>
+                <tbody id="table-weekday-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 4. Performance par Heure de la Journée Accordion -->
+    <div class="accordion">
+        <div class="accordion-header" onclick="toggleAccordion('hourly')">
+            <span>🕒 Analyse par Heure de la Journée</span>
+            <i class="fa-solid fa-chevron-down" id="arrow-hourly"></i>
+        </div>
+        <div class="accordion-content" id="content-hourly">
+            <table class="glass-table">
+                <thead>
+                    <tr>
+                        <th>Heure</th>
+                        <th>Wins</th>
+                        <th>Loss</th>
+                        <th>BE</th>
+                        <th>Win Rate</th>
+                        <th>PnL NET</th>
+                    </tr>
+                </thead>
+                <tbody id="table-hourly-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 5. Collision & Chevauchement Accordion -->
+    <div class="accordion">
+        <div class="accordion-header" onclick="toggleAccordion('collision')">
+            <span>⚔️ Chevauchements & Collisions d'Ordres</span>
+            <i class="fa-solid fa-chevron-down" id="arrow-collision"></i>
+        </div>
+        <div class="accordion-content" id="content-collision">
+            <div class="accordion-row">
+                <span>Nombre de Collisions Détectées</span>
+                <span id="stat-collision-count" style="color: var(--accent-gold); font-size: 13px;">-</span>
+            </div>
+            <div class="accordion-row">
+                <span>🚀 Chevauchement le PLUS profitable</span>
+                <span id="stat-collision-best" style="color: var(--accent-green); text-align: right;">-</span>
+            </div>
+            <div class="accordion-row">
+                <span>⚠️ Chevauchement le MOINS profitable</span>
+                <span id="stat-collision-worst" style="color: var(--accent-red); text-align: right;">-</span>
+            </div>
+            <label class="form-label" style="margin-top: 15px; margin-bottom: 5px;">Détail des Collisions Détectées</label>
+            <table class="glass-table" style="margin-top: 10px;">
+                <thead>
+                    <tr>
+                        <th>Date & Heure</th>
+                        <th>Nb Ordres</th>
+                        <th>Stratégies Impliquées</th>
+                        <th>Risque Estimé</th>
+                        <th>Résultat Net</th>
+                    </tr>
+                </thead>
+                <tbody id="table-collision-body"></tbody>
+            </table>
+        </div>
+    </div>
+
     <!-- Advanced Stats Accordion -->
     <div class="accordion">
-        <div class="accordion-header" id="acc-header-advanced">
+        <div class="accordion-header" onclick="toggleAccordion('advanced')">
             <span>🔍 Statistiques Avancées & Streaks</span>
-            <i class="fa-solid fa-chevron-down"></i>
+            <i class="fa-solid fa-chevron-down" id="arrow-advanced"></i>
         </div>
-        <div class="accordion-content" id="acc-content-advanced">
+        <div class="accordion-content" id="content-advanced">
             <div class="accordion-row">
                 <span>Trades Exécutés</span>
                 <span id="stat-total-trades">-</span>
@@ -539,15 +741,16 @@
             window.location.href = 'index.html' + window.location.search;
         });
 
-        // Setup Accordion
-        const accHeader = document.getElementById('acc-header-advanced');
-        const accContent = document.getElementById('acc-content-advanced');
-        accHeader.addEventListener('click', () => {
-            const isActive = accHeader.classList.toggle('active');
-            accContent.style.display = isActive ? 'block' : 'none';
-            const icon = accHeader.querySelector('i');
-            icon.className = isActive ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down';
-        });
+        // Toggle accordion helper
+        function toggleAccordion(id) {
+            const header = document.getElementById(`arrow-${id}`).parentNode;
+            const content = document.getElementById(`content-${id}`);
+            const arrow = document.getElementById(`arrow-${id}`);
+            
+            const isActive = header.classList.toggle('active');
+            content.style.display = isActive ? 'block' : 'none';
+            arrow.className = isActive ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down';
+        }
 
         // Preset Button Handling
         presetBtns.forEach(btn => {
@@ -576,6 +779,13 @@
         startDateInput.addEventListener('change', runBacktest);
         endDateInput.addEventListener('change', runBacktest);
 
+        // Date utils
+        const monthFrench = {
+            1: "Janvier", 2: "Février", 3: "Mars", 4: "Avril", 5: "Mai", 6: "Juin",
+            7: "Juillet", 8: "Août", 9: "Septembre", 10: "Octobre", 11: "Novembre", 12: "Décembre"
+        };
+        const dayNames = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"];
+
         // Core Backtest Engine
         function runBacktest() {
             const selectedStrategy = strategySelect.value;
@@ -589,10 +799,11 @@
                 return isStratMatch && tDate >= startDate && tDate <= endDate;
             });
 
-            // Sort chronologically by exit time (simulating exit sequence)
-            filteredTrades.sort((a, b) => new Date(a.x) - new Date(b.x));
+            // Sort chronologically by entry/exit time
+            const tradesSortedEntry = [...filteredTrades].sort((a, b) => new Date(a.e) - new Date(b.e));
+            const tradesSortedExit = [...filteredTrades].sort((a, b) => new Date(a.x) - new Date(b.x));
 
-            // 2. Performance Tracking
+            // 2. Core variables
             let equity = STARTING_BALANCE;
             let peak = STARTING_BALANCE;
             let maxDDVal = 0;
@@ -618,10 +829,32 @@
             let biggestWin = 0;
             let biggestLoss = 0;
 
-            // Tracking for daily drawdown
+            // Tracking for daily drawdown and weekdays/hours/months
             const dailyEquityPoints = {};
+            const monthlyData = {};
+            
+            const dailyStats = [
+                { wins: 0, losses: 0, be: 0, pnl: 0 },
+                { wins: 0, losses: 0, be: 0, pnl: 0 },
+                { wins: 0, losses: 0, be: 0, pnl: 0 },
+                { wins: 0, losses: 0, be: 0, pnl: 0 },
+                { wins: 0, losses: 0, be: 0, pnl: 0 }
+            ];
 
-            filteredTrades.forEach(t => {
+            const hourlyStats = {};
+            for (let h = 0; h < 24; h++) {
+                hourlyStats[h] = { wins: 0, losses: 0, be: 0, pnl: 0 };
+            }
+
+            const stratStats = {
+                "nas100": { label: "SMC NAS100", asset: "US100", count: 0, wins: 0, losses: 0, be: 0, pnl: 0 },
+                "xauusd": { label: "SMC XAUUSD", asset: "XAUUSD", count: 0, wins: 0, losses: 0, be: 0, pnl: 0 },
+                "gold": { label: "GOLD Trend", asset: "XAUUSD", count: 0, wins: 0, losses: 0, be: 0, pnl: 0 },
+                "eurusd": { label: "EURUSD Trend", asset: "EURUSD", count: 0, wins: 0, losses: 0, be: 0, pnl: 0 }
+            };
+
+            // Loop through trades (Exit sequence)
+            tradesSortedExit.forEach(t => {
                 const pnl = t.p;
                 equity += pnl;
 
@@ -631,7 +864,7 @@
                     label: `${t.s.toUpperCase()} ${t.d} (${pnl > 0 ? '+' : ''}${pnl}$)`
                 });
 
-                // Stats calculation
+                // Streak & Win/Loss computation
                 if (pnl > 0) {
                     totalWins++;
                     grossProfit += pnl;
@@ -661,13 +894,142 @@
                     maxDDPct = ddPct;
                 }
 
-                // Group by Day
+                // Daily Drawdown group
                 const dayStr = t.x.split(' ')[0];
-                if (!dailyEquityPoints[dayStr]) {
-                    dailyEquityPoints[dayStr] = [];
-                }
+                if (!dailyEquityPoints[dayStr]) dailyEquityPoints[dayStr] = [];
                 dailyEquityPoints[dayStr].push(equity);
+
+                // Monthly grouping
+                const exitDateObj = new Date(t.x);
+                const mKey = `${exitDateObj.getFullYear()}-${String(exitDateObj.getMonth() + 1).padStart(2, '0')}`;
+                if (!monthlyData[mKey]) {
+                    monthlyData[mKey] = { pnl: 0, count: 0, label: `${monthFrench[exitDateObj.getMonth() + 1]} ${exitDateObj.getFullYear()}` };
+                }
+                monthlyData[mKey].pnl += pnl;
+                monthlyData[mKey].count++;
+
+                // Strategy breakdown grouping
+                if (stratStats[t.s]) {
+                    stratStats[t.s].count++;
+                    if (t.r === 'WIN') stratStats[t.s].wins++;
+                    else if (t.r === 'LOSS') stratStats[t.s].losses++;
+                    else if (t.r === 'BE') stratStats[t.s].be++;
+                    stratStats[t.s].pnl += pnl;
+                }
             });
+
+            // Loop through trades (Entry sequence for Day/Hour)
+            tradesSortedEntry.forEach(t => {
+                const entryDateObj = new Date(t.e);
+                const weekday = entryDateObj.getDay(); // 0 Sunday, 1 Monday, etc.
+                const hour = entryDateObj.getHours();
+
+                if (weekday !== 0 && weekday !== 6) {
+                    const idx = weekday - 1;
+                    if (t.r === 'WIN') dailyStats[idx].wins++;
+                    else if (t.r === 'LOSS') dailyStats[idx].losses++;
+                    else if (t.r === 'BE') dailyStats[idx].be++;
+                    dailyStats[idx].pnl += t.p;
+                }
+
+                if (t.r === 'WIN') hourlyStats[hour].wins++;
+                else if (t.r === 'LOSS') hourlyStats[hour].losses++;
+                else if (t.r === 'BE') hourlyStats[hour].be++;
+                hourlyStats[hour].pnl += t.p;
+            });
+
+            // Prop Firm Challenge sequential evaluation
+            let phase1Passed = false;
+            let phase1Date = null;
+            let phase1Days = 0;
+
+            let phase2Passed = false;
+            let phase2Date = null;
+            let phase2Days = 0;
+
+            let fundedSuccess = false;
+
+            // Phase 1 Objectif +10% ($11,000)
+            let currentChallengeBal = STARTING_BALANCE;
+            for (let i = 0; i < tradesSortedExit.length; i++) {
+                const t = tradesSortedExit[i];
+                currentChallengeBal += t.p;
+                if (!phase1Passed && currentChallengeBal >= STARTING_BALANCE * 1.10) {
+                    phase1Passed = true;
+                    phase1Date = new Date(t.x);
+                    
+                    // Count weekdays to pass
+                    let d = new Date(startDate);
+                    let count = 0;
+                    while (d <= phase1Date) {
+                        const day = d.getDay();
+                        if (day !== 0 && day !== 6) count++;
+                        d.setDate(d.getDate() + 1);
+                    }
+                    phase1Days = count;
+                    break;
+                }
+            }
+
+            // Phase 2 Objectif +5% ($10,500)
+            if (phase1Passed) {
+                currentChallengeBal = STARTING_BALANCE;
+                const p2Trades = tradesSortedExit.filter(t => new Date(t.x) > phase1Date);
+                for (let i = 0; i < p2Trades.length; i++) {
+                    const t = p2Trades[i];
+                    currentChallengeBal += t.p;
+                    if (!phase2Passed && currentChallengeBal >= STARTING_BALANCE * 1.05) {
+                        phase2Passed = true;
+                        phase2Date = new Date(t.x);
+
+                        // Count weekdays to pass
+                        let d = new Date(phase1Date);
+                        let count = 0;
+                        while (d <= phase2Date) {
+                            const day = d.getDay();
+                            if (day !== 0 && day !== 6) count++;
+                            d.setDate(d.getDate() + 1);
+                        }
+                        phase2Days = count;
+                        fundedSuccess = true;
+                        break;
+                    }
+                }
+            }
+
+            // Update Challenge Badges
+            const p1Badge = document.getElementById('badge-p1');
+            const p1Card = document.getElementById('challenge-phase1');
+            if (phase1Passed) {
+                p1Card.className = 'challenge-badge success';
+                p1Badge.innerHTML = `🟢 <strong>RÉUSSI</strong> en ${phase1Days}j ouvrés (${phase1Date.toLocaleDateString('fr-FR')})`;
+            } else {
+                p1Card.className = 'challenge-badge pending';
+                p1Badge.innerHTML = `⚠️ <strong>EN COURS</strong> (${Math.max(0, Math.round(((currentChallengeBal - STARTING_BALANCE) / 1000) * 100))}% atteints)`;
+            }
+
+            const p2Badge = document.getElementById('badge-p2');
+            const p2Card = document.getElementById('challenge-phase2');
+            if (phase2Passed) {
+                p2Card.className = 'challenge-badge success';
+                p2Badge.innerHTML = `🟢 <strong>RÉUSSI</strong> en ${phase2Days}j ouvrés (${phase2Date.toLocaleDateString('fr-FR')})`;
+            } else if (phase1Passed) {
+                p2Card.className = 'challenge-badge pending';
+                p2Badge.innerHTML = `⚠️ <strong>EN COURS</strong> (${Math.max(0, Math.round(((currentChallengeBal - STARTING_BALANCE) / 500) * 100))}% atteints)`;
+            } else {
+                p2Card.className = 'challenge-badge';
+                p2Badge.innerHTML = `⏳ Non entamé`;
+            }
+
+            const fundedBadge = document.getElementById('badge-funded');
+            const fundedCard = document.getElementById('challenge-funded');
+            if (fundedSuccess) {
+                fundedCard.className = 'challenge-badge success';
+                fundedBadge.innerHTML = `🟢 <strong>FINANCÉ CONQUIS !</strong>`;
+            } else {
+                fundedCard.className = 'challenge-badge';
+                fundedBadge.innerHTML = `⏳ Non disponible`;
+            }
 
             // Calculate Max Daily Drawdown
             let maxDailyDDVal = 0;
@@ -689,7 +1051,7 @@
                 prevDayClose = points[points.length - 1];
             });
 
-            // 3. Final calculations
+            // Final core stats
             const netProfit = equity - STARTING_BALANCE;
             const netProfitPct = (netProfit / STARTING_BALANCE) * 100;
             const winRate = (totalWins + totalLosses) > 0 ? (totalWins / (totalWins + totalLosses)) * 100 : 0;
@@ -701,7 +1063,7 @@
             const recoveryFactor = maxDDVal > 0 ? netProfit / maxDDVal : 0;
             const expectancy = totalTrades > 0 ? netProfit / totalTrades : 0;
 
-            // 4. Update UI
+            // Render Core Stat Widgets
             document.getElementById('stat-final-balance').innerText = `${equity.toLocaleString('fr-FR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} $`;
             
             const netProfitEl = document.getElementById('stat-net-profit');
@@ -725,7 +1087,154 @@
 
             document.getElementById('chart-max-equity').innerText = `Sommet : ${Math.max(...equityPoints.map(p => p.balance)).toLocaleString('fr-FR', {maximumFractionDigits: 0})} $`;
 
-            // 5. Draw Curve SVG Chart
+            // 3. Render Monthly Performance Table
+            const sortedMonthKeys = Object.keys(monthlyData).sort();
+            const tableMonthlyBody = document.getElementById('table-monthly-body');
+            tableMonthlyBody.innerHTML = '';
+            
+            let accumBal = STARTING_BALANCE;
+            sortedMonthKeys.forEach(mKey => {
+                const group = monthlyData[mKey];
+                const startBal = accumBal;
+                const endBal = accumBal + group.pnl;
+                const yieldPct = (group.pnl / STARTING_BALANCE) * 100;
+                const compoundPct = startBal > 0 ? (group.pnl / startBal) * 100 : 0;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="text-bold">${group.label}</td>
+                    <td class="text-bold ${group.pnl >= 0 ? 'text-green' : 'text-red'}">${group.pnl >= 0 ? '+' : ''}${group.pnl.toLocaleString('fr-FR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} $</td>
+                    <td class="${group.pnl >= 0 ? 'text-green' : 'text-red'}">${group.pnl >= 0 ? '+' : ''}${yieldPct.toFixed(2)}%</td>
+                    <td class="${group.pnl >= 0 ? 'text-green' : 'text-red'}">${group.pnl >= 0 ? '+' : ''}${compoundPct.toFixed(2)}%</td>
+                    <td>${group.count}</td>
+                    <td class="text-bold">${endBal.toLocaleString('fr-FR', {minimumFractionDigits: 0, maximumFractionDigits: 0})} $</td>
+                `;
+                tableMonthlyBody.appendChild(tr);
+                accumBal = endBal;
+            });
+
+            // 4. Render Strategy Table
+            const tableStrategyBody = document.getElementById('table-strategy-body');
+            tableStrategyBody.innerHTML = '';
+            Object.keys(stratStats).forEach(sKey => {
+                const s = stratStats[sKey];
+                const sWinRate = (s.wins + s.losses) > 0 ? (s.wins / (s.wins + s.losses)) * 100 : 0;
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="text-bold">${s.label}</td>
+                    <td>${s.asset}</td>
+                    <td>${s.count}</td>
+                    <td>${s.wins}</td>
+                    <td>${s.be}</td>
+                    <td>${s.losses}</td>
+                    <td class="text-bold ${s.pnl >= 0 ? 'text-green' : 'text-red'}">${s.pnl >= 0 ? '+' : ''}${s.pnl.toLocaleString('fr-FR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} $</td>
+                    <td class="text-bold">${sWinRate.toFixed(1)}%</td>
+                `;
+                tableStrategyBody.appendChild(tr);
+            });
+
+            // 5. Render Weekdays Table
+            const tableWeekdayBody = document.getElementById('table-weekday-body');
+            tableWeekdayBody.innerHTML = '';
+            dailyStats.forEach((dayStat, idx) => {
+                const dayWinRate = (dayStat.wins + dayStat.losses) > 0 ? (dayStat.wins / (dayStat.wins + dayStat.losses)) * 100 : 0;
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="text-bold">${dayNames[idx]}</td>
+                    <td>${dayStat.wins}</td>
+                    <td>${dayStat.losses}</td>
+                    <td>${dayStat.be}</td>
+                    <td class="text-bold">${dayWinRate.toFixed(1)}%</td>
+                    <td class="text-bold ${dayStat.pnl >= 0 ? 'text-green' : 'text-red'}">${dayStat.pnl >= 0 ? '+' : ''}${dayStat.pnl.toLocaleString('fr-FR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} $</td>
+                `;
+                tableWeekdayBody.appendChild(tr);
+            });
+
+            // 6. Render Hourly Table
+            const tableHourlyBody = document.getElementById('table-hourly-body');
+            tableHourlyBody.innerHTML = '';
+            for (let h = 0; h < 24; h++) {
+                const hourStat = hourlyStats[h];
+                const totalH = hourStat.wins + hourStat.losses + hourStat.be;
+                if (totalH === 0) continue; // Skip hours with no trades
+
+                const hWinRate = (hourStat.wins + hourStat.losses) > 0 ? (hourStat.wins / (hourStat.wins + hourStat.losses)) * 100 : 0;
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="text-bold">${String(h).padStart(2, '0')}h</td>
+                    <td>${hourStat.wins}</td>
+                    <td>${hourStat.losses}</td>
+                    <td>${hourStat.be}</td>
+                    <td class="text-bold">${hWinRate.toFixed(1)}%</td>
+                    <td class="text-bold ${hourStat.pnl >= 0 ? 'text-green' : 'text-red'}">${hourStat.pnl >= 0 ? '+' : ''}${hourStat.pnl.toLocaleString('fr-FR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} $</td>
+                `;
+                tableHourlyBody.appendChild(tr);
+            }
+
+            // 7. Overlaps & Collisions calculations
+            const collisionsByHour = {};
+            tradesSortedEntry.forEach(t => {
+                const d = new Date(t.e);
+                const dayStr = t.e.split(' ')[0];
+                const hour = d.getHours();
+                const key = `${dayStr} à ${String(hour).padStart(2, '0')}h`;
+                if (!collisionsByHour[key]) collisionsByHour[key] = [];
+                collisionsByHour[key].push(t);
+            });
+
+            const hourlyCollisions = [];
+            Object.keys(collisionsByHour).forEach(key => {
+                const tList = collisionsByHour[key];
+                const strats = new Set(tList.map(t => t.s.toUpperCase()));
+                if (strats.size >= 2) {
+                    const combinedPnl = tList.reduce((sum, t) => sum + t.p, 0);
+                    hourlyCollisions.push({
+                        time: key,
+                        strategies: Array.from(strats),
+                        numTrades: tList.length,
+                        pnl: combinedPnl
+                    });
+                }
+            });
+
+            // Sort chronologically
+            hourlyCollisions.sort((a, b) => a.time.localeCompare(b.time));
+
+            document.getElementById('stat-collision-count').innerText = `${hourlyCollisions.length} collisions`;
+
+            let bestColl = null;
+            let worstColl = null;
+            if (hourlyCollisions.length > 0) {
+                bestColl = hourlyCollisions.reduce((max, c) => c.pnl > max.pnl ? c : max, hourlyCollisions[0]);
+                worstColl = hourlyCollisions.reduce((min, c) => c.pnl < min.pnl ? c : min, hourlyCollisions[0]);
+                
+                document.getElementById('stat-collision-best').innerHTML = `${bestColl.time}<br>🌐 [${bestColl.strategies.join(', ')}]<br><strong>🟢 +${bestColl.pnl.toFixed(2)} $</strong>`;
+                document.getElementById('stat-collision-worst').innerHTML = `${worstColl.time}<br>🌐 [${worstColl.strategies.join(', ')}]<br><strong>🔴 ${worstColl.pnl.toFixed(2)} $</strong>`;
+            } else {
+                document.getElementById('stat-collision-best').innerText = 'Aucune';
+                document.getElementById('stat-collision-worst').innerText = 'Aucune';
+            }
+
+            // Render Collisions Table
+            const tableCollisionBody = document.getElementById('table-collision-body');
+            tableCollisionBody.innerHTML = '';
+            
+            // Show latest 15 collisions for cleaner view, or all
+            hourlyCollisions.slice().reverse().forEach(coll => {
+                const tr = document.createElement('tr');
+                // Risque Estimé = number of strats * 0.5%
+                const estRisk = coll.strategies.length * 0.5;
+                tr.innerHTML = `
+                    <td class="text-bold">${coll.time}</td>
+                    <td>${coll.numTrades}</td>
+                    <td class="text-secondary">${coll.strategies.join(', ')}</td>
+                    <td>${estRisk.toFixed(1)}%</td>
+                    <td class="text-bold ${coll.pnl >= 0 ? 'text-green' : 'text-red'}">${coll.pnl >= 0 ? '+' : ''}${coll.pnl.toFixed(2)} $</td>
+                `;
+                tableCollisionBody.appendChild(tr);
+            });
+
+            // 8. Draw Curve SVG Chart
             drawChart(equityPoints);
         }
 
