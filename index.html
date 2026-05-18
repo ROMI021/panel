@@ -531,14 +531,19 @@
             Telegram.WebApp.close();
         });
 
-        // Live UTC Clock & Highlight Active Hour
+        // Live Broker MT5 Clock (EET/EEST) & Highlight Active Hour
         function updateActiveHours() {
             const now = new Date();
-            const utcHour = now.getUTCHours();
-            const utcMin = String(now.getUTCMinutes()).padStart(2, '0');
             
-            // Update clock display
-            document.getElementById('utc-clock-badge').innerText = `UTC ${String(utcHour).padStart(2, '0')}:${utcMin}`;
+            // Format to Eastern European Time (EET/EEST) used by FTMO and major brokers
+            const brokerOptions = { timeZone: 'Europe/Athens', hour: 'numeric', minute: 'numeric', hour12: false };
+            const brokerTimeStr = new Intl.DateTimeFormat('fr-FR', brokerOptions).format(now);
+            const [bHourStr, bMinStr] = brokerTimeStr.split(':');
+            const brokerHour = parseInt(bHourStr);
+            const brokerMin = bMinStr.padStart(2, '0');
+            
+            // Update clock display with actual Broker Server Time
+            document.getElementById('utc-clock-badge').innerText = `Broker MT5 ${String(brokerHour).padStart(2, '0')}:${brokerMin}`;
 
             // Reset and highlight badges
             const badges = document.querySelectorAll('.hour-badge');
@@ -546,7 +551,7 @@
                 const text = badge.innerText.trim();
                 if (text.endsWith('h')) {
                     const hVal = parseInt(text.replace('h', ''));
-                    if (hVal === utcHour) {
+                    if (hVal === brokerHour) {
                         badge.style.background = 'rgba(245, 158, 11, 0.25)';
                         badge.style.borderColor = 'var(--accent-gold)';
                         badge.style.color = 'var(--accent-gold)';
