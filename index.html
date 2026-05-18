@@ -373,15 +373,30 @@
     <!-- Risk Configuration Section -->
     <div class="glass-card">
         <div class="slider-section">
-            <div class="slider-header">
-                <span class="slider-title">
-                    <i class="fa-solid fa-shield-halved"></i>
-                    Configuration du Risque
-                </span>
-                <span class="slider-value" id="slider-val">0.5%</span>
+            <div class="process-title" style="margin-bottom: 4px;">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>Configuration des Risques</span>
             </div>
-            <input type="range" id="risk-slider" class="range-slider" min="0.1" max="2.0" step="0.1" value="0.5">
-            <div class="slider-hints">
+            
+            <!-- NAS100 SMC Risk Slider -->
+            <div style="margin-top: 14px;">
+                <div class="slider-header" style="margin-bottom: 8px;">
+                    <span class="slider-title" style="font-size: 13px; font-weight: 500;"><i class="fa-solid fa-robot"></i> NAS100 SMC</span>
+                    <span class="slider-value" id="nas-slider-val" style="font-size: 16px; padding: 2px 8px;">0.5%</span>
+                </div>
+                <input type="range" id="nas-risk-slider" class="range-slider" min="0.1" max="2.0" step="0.1" value="0.5">
+            </div>
+
+            <!-- XAUUSD SMC Risk Slider -->
+            <div style="margin-top: 18px;">
+                <div class="slider-header" style="margin-bottom: 8px;">
+                    <span class="slider-title" style="font-size: 13px; font-weight: 500;"><i class="fa-solid fa-coins"></i> XAUUSD SMC</span>
+                    <span class="slider-value" id="xau-slider-val" style="font-size: 16px; padding: 2px 8px;">0.5%</span>
+                </div>
+                <input type="range" id="xau-risk-slider" class="range-slider" min="0.1" max="2.0" step="0.1" value="0.5">
+            </div>
+            
+            <div class="slider-hints" style="margin-top: 12px;">
                 <span>Sécurisé (0.1%)</span>
                 <span>Standard (0.5%)</span>
                 <span>Agressif (2.0%)</span>
@@ -414,7 +429,8 @@
         const mon = params.get('monitor') || '🔴';
         const sup = params.get('supervisor') || '🔴';
         
-        const risk = parseFloat(params.get('risk') || '0.5');
+        const riskNas = parseFloat(params.get('risk_nas100') || params.get('risk') || '0.5');
+        const riskXau = parseFloat(params.get('risk_xauusd') || params.get('risk') || '0.5');
 
         // Apply HTML display values
         document.getElementById('val-balance').innerText = balance.toLocaleString('en-US', { minimumFractionDigits: 2 }) + '$';
@@ -456,22 +472,32 @@
         setDot('dot-monitor', mon);
         setDot('dot-supervisor', sup);
 
-        // Slider logic
-        const slider = document.getElementById('risk-slider');
-        const sliderVal = document.getElementById('slider-val');
-        slider.value = risk;
-        sliderVal.innerText = risk.toFixed(1) + '%';
+        // Slider logic for NAS100
+        const nasSlider = document.getElementById('nas-risk-slider');
+        const nasSliderVal = document.getElementById('nas-slider-val');
+        nasSlider.value = riskNas;
+        nasSliderVal.innerText = riskNas.toFixed(1) + '%';
+        nasSlider.addEventListener('input', (e) => {
+            nasSliderVal.innerText = parseFloat(e.target.value).toFixed(1) + '%';
+        });
 
-        slider.addEventListener('input', (e) => {
-            sliderVal.innerText = parseFloat(e.target.value).toFixed(1) + '%';
+        // Slider logic for XAUUSD
+        const xauSlider = document.getElementById('xau-risk-slider');
+        const xauSliderVal = document.getElementById('xau-slider-val');
+        xauSlider.value = riskXau;
+        xauSliderVal.innerText = riskXau.toFixed(1) + '%';
+        xauSlider.addEventListener('input', (e) => {
+            xauSliderVal.innerText = parseFloat(e.target.value).toFixed(1) + '%';
         });
 
         // Submit action back to Telegram Bot via WebApp.sendData
         document.getElementById('btn-submit').addEventListener('click', () => {
-            const selectedRisk = parseFloat(slider.value);
+            const valNas = parseFloat(nasSlider.value);
+            const valXau = parseFloat(xauSlider.value);
             const dataToSend = {
                 action: "set_risk",
-                value: selectedRisk
+                nas100: valNas,
+                xauusd: valXau
             };
             Telegram.WebApp.sendData(JSON.stringify(dataToSend));
             Telegram.WebApp.close();
