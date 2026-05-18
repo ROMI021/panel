@@ -350,8 +350,9 @@
 
     <!-- Active Hours Section (Option 5) -->
     <div class="glass-card">
-        <div class="process-title">
-            <span><i class="fa-solid fa-calendar-days"></i> ⏰ Plages Horaires Actives</span>
+        <div class="process-title" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+            <span><i class="fa-solid fa-calendar-days"></i> Plages Horaires Actives</span>
+            <span id="utc-clock-badge" style="font-size: 10px; font-weight: 700; color: var(--accent-gold); background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); padding: 2px 8px; border-radius: 20px;">UTC --:--</span>
         </div>
         <div style="display: flex; flex-direction: column; gap: 8px;">
             
@@ -530,33 +531,52 @@
             Telegram.WebApp.close();
         });
 
-        // Highlight Active Server Hour
-        const currentHour = parseInt(params.get('hour') !== null ? params.get('hour') : new Date().getHours());
-        const badges = document.querySelectorAll('.hour-badge');
-        badges.forEach(badge => {
-            const text = badge.innerText.trim();
-            if (text.endsWith('h')) {
-                const hVal = parseInt(text.replace('h', ''));
-                if (hVal === currentHour) {
-                    badge.style.background = 'rgba(245, 158, 11, 0.25)';
+        // Live UTC Clock & Highlight Active Hour
+        function updateActiveHours() {
+            const now = new Date();
+            const utcHour = now.getUTCHours();
+            const utcMin = String(now.getUTCMinutes()).padStart(2, '0');
+            
+            // Update clock display
+            document.getElementById('utc-clock-badge').innerText = `UTC ${String(utcHour).padStart(2, '0')}:${utcMin}`;
+
+            // Reset and highlight badges
+            const badges = document.querySelectorAll('.hour-badge');
+            badges.forEach(badge => {
+                const text = badge.innerText.trim();
+                if (text.endsWith('h')) {
+                    const hVal = parseInt(text.replace('h', ''));
+                    if (hVal === utcHour) {
+                        badge.style.background = 'rgba(245, 158, 11, 0.25)';
+                        badge.style.borderColor = 'var(--accent-gold)';
+                        badge.style.color = 'var(--accent-gold)';
+                        badge.style.textShadow = '0 0 8px rgba(245, 158, 11, 0.6)';
+                        badge.style.fontWeight = '700';
+                        
+                        // Automatically expand the details accordion
+                        const parentDetails = badge.closest('details');
+                        if (parentDetails) {
+                            parentDetails.open = true;
+                        }
+                    } else {
+                        // Reset standard style
+                        badge.style.background = 'rgba(255, 255, 255, 0.05)';
+                        badge.style.borderColor = 'var(--glass-border)';
+                        badge.style.color = 'var(--text-secondary)';
+                        badge.style.textShadow = 'none';
+                        badge.style.fontWeight = '500';
+                    }
+                } else if (text.includes('H24')) {
+                    badge.style.background = 'rgba(245, 158, 11, 0.15)';
                     badge.style.borderColor = 'var(--accent-gold)';
                     badge.style.color = 'var(--accent-gold)';
-                    badge.style.textShadow = '0 0 8px rgba(245, 158, 11, 0.6)';
                     badge.style.fontWeight = '700';
-                    
-                    // Automatically expand the details accordion
-                    const parentDetails = badge.closest('details');
-                    if (parentDetails) {
-                        parentDetails.open = true;
-                    }
                 }
-            } else if (text.includes('H24')) {
-                badge.style.background = 'rgba(245, 158, 11, 0.15)';
-                badge.style.borderColor = 'var(--accent-gold)';
-                badge.style.color = 'var(--accent-gold)';
-                badge.style.fontWeight = '700';
-            }
-        });
+            });
+        }
+        
+        updateActiveHours();
+        setInterval(updateActiveHours, 10000); // refresh every 10 seconds
     </script>
 </body>
 </html>
