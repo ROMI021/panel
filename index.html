@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -61,7 +62,7 @@
             height: 18px;
         }
 
-        .switch input { 
+        .switch input {
             opacity: 0;
             width: 0;
             height: 0;
@@ -90,12 +91,12 @@
             transition: .2s;
         }
 
-        input:checked + .slider {
+        input:checked+.slider {
             background-color: rgba(16, 185, 129, 0.15);
             border-color: var(--accent-green);
         }
 
-        input:checked + .slider:before {
+        input:checked+.slider:before {
             transform: translateX(16px);
             background-color: var(--accent-green);
         }
@@ -116,11 +117,13 @@
             border-radius: 20px;
             text-transform: uppercase;
         }
+
         .process-badge.active {
             background: rgba(16, 185, 129, 0.15);
             color: var(--accent-green);
             border: 1px solid rgba(16, 185, 129, 0.2);
         }
+
         .process-badge.inactive {
             background: rgba(239, 68, 68, 0.15);
             color: var(--accent-red);
@@ -337,9 +340,55 @@
             transform: scale(0.98);
             filter: brightness(0.9);
         }
+
+        /* Premium Nav Tabs */
+        .nav-tabs {
+            display: flex;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 20px;
+            gap: 4px;
+        }
+
+        .nav-tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .nav-tab.active {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
     </style>
 </head>
+
 <body>
+
+    <!-- Top Tabs Navigation -->
+    <div class="nav-tabs">
+        <div class="nav-tab active">
+            <i class="fa-solid fa-gauge-high"></i> Live Monitor
+        </div>
+        <a id="nav-backtest" href="backtest.html" class="nav-tab">
+            <i class="fa-solid fa-chart-line"></i> Backtests Élite
+        </a>
+    </div>
 
     <!-- Header Section -->
     <div class="glass-card">
@@ -370,7 +419,9 @@
         <div class="circle-area">
             <svg width="150" height="150">
                 <circle cx="75" cy="75" r="60" stroke="#334155" stroke-width="10" fill="transparent" />
-                <circle id="progress-circle" class="progress-ring-circle" cx="75" cy="75" r="60" stroke="var(--accent-green)" stroke-width="10" fill="transparent" stroke-dasharray="377" stroke-dashoffset="377" />
+                <circle id="progress-circle" class="progress-ring-circle" cx="75" cy="75" r="60"
+                    stroke="var(--accent-green)" stroke-width="10" fill="transparent" stroke-dasharray="377"
+                    stroke-dashoffset="377" />
             </svg>
             <div class="circle-label">
                 <span class="circle-pnl-title">PnL Journalier</span>
@@ -424,15 +475,20 @@
 
     <!-- Active Hours Section (Option 5) -->
     <div class="glass-card">
-        <div class="process-title" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+        <div class="process-title"
+            style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
             <span><i class="fa-solid fa-calendar-days"></i> Plages Horaires Actives</span>
-            <span id="utc-clock-badge" style="font-size: 10px; font-weight: 700; color: var(--accent-gold); background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); padding: 2px 8px; border-radius: 20px;">UTC --:--</span>
+            <span id="utc-clock-badge"
+                style="font-size: 10px; font-weight: 700; color: var(--accent-gold); background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); padding: 2px 8px; border-radius: 20px;">UTC
+                --:--</span>
         </div>
         <div style="display: flex; flex-direction: column; gap: 8px;">
-            
+
             <!-- NAS100 SMC -->
-            <details class="hours-details" style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--glass-border); border-radius: 12px; padding: 10px;">
-                <summary style="font-size: 13px; font-weight: 700; cursor: pointer; outline: none; display: flex; align-items: center; justify-content: space-between; list-style: none;">
+            <details class="hours-details"
+                style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--glass-border); border-radius: 12px; padding: 10px;">
+                <summary
+                    style="font-size: 13px; font-weight: 700; cursor: pointer; outline: none; display: flex; align-items: center; justify-content: space-between; list-style: none;">
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <span>🤖 NAS100 SMC</span>
                         <span id="badge-status-nas100" class="process-badge inactive">OFF</span>
@@ -446,18 +502,25 @@
                     </div>
                 </summary>
                 <div style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px;">
-                    <span class="hour-badge">00h</span><span class="hour-badge">01h</span><span class="hour-badge">02h</span>
-                    <span class="hour-badge">03h</span><span class="hour-badge">04h</span><span class="hour-badge">07h</span>
-                    <span class="hour-badge">08h</span><span class="hour-badge">09h</span><span class="hour-badge">11h</span>
-                    <span class="hour-badge">12h</span><span class="hour-badge">13h</span><span class="hour-badge">14h</span>
-                    <span class="hour-badge">15h</span><span class="hour-badge">16h</span><span class="hour-badge">17h</span>
+                    <span class="hour-badge">00h</span><span class="hour-badge">01h</span><span
+                        class="hour-badge">02h</span>
+                    <span class="hour-badge">03h</span><span class="hour-badge">04h</span><span
+                        class="hour-badge">07h</span>
+                    <span class="hour-badge">08h</span><span class="hour-badge">09h</span><span
+                        class="hour-badge">11h</span>
+                    <span class="hour-badge">12h</span><span class="hour-badge">13h</span><span
+                        class="hour-badge">14h</span>
+                    <span class="hour-badge">15h</span><span class="hour-badge">16h</span><span
+                        class="hour-badge">17h</span>
                     <span class="hour-badge">20h</span><span class="hour-badge">23h</span>
                 </div>
             </details>
 
             <!-- XAUUSD SMC -->
-            <details class="hours-details" style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--glass-border); border-radius: 12px; padding: 10px;">
-                <summary style="font-size: 13px; font-weight: 700; cursor: pointer; outline: none; display: flex; align-items: center; justify-content: space-between; list-style: none;">
+            <details class="hours-details"
+                style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--glass-border); border-radius: 12px; padding: 10px;">
+                <summary
+                    style="font-size: 13px; font-weight: 700; cursor: pointer; outline: none; display: flex; align-items: center; justify-content: space-between; list-style: none;">
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <span>🥇 XAUUSD SMC</span>
                         <span id="badge-status-xauusd" class="process-badge inactive">OFF</span>
@@ -471,19 +534,27 @@
                     </div>
                 </summary>
                 <div style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px;">
-                    <span class="hour-badge">00h</span><span class="hour-badge">03h</span><span class="hour-badge">04h</span>
-                    <span class="hour-badge">07h</span><span class="hour-badge">08h</span><span class="hour-badge">09h</span>
-                    <span class="hour-badge">10h</span><span class="hour-badge">11h</span><span class="hour-badge">12h</span>
-                    <span class="hour-badge">13h</span><span class="hour-badge">14h</span><span class="hour-badge">15h</span>
-                    <span class="hour-badge">16h</span><span class="hour-badge">17h</span><span class="hour-badge">18h</span>
-                    <span class="hour-badge">20h</span><span class="hour-badge">21h</span><span class="hour-badge">22h</span>
+                    <span class="hour-badge">00h</span><span class="hour-badge">03h</span><span
+                        class="hour-badge">04h</span>
+                    <span class="hour-badge">07h</span><span class="hour-badge">08h</span><span
+                        class="hour-badge">09h</span>
+                    <span class="hour-badge">10h</span><span class="hour-badge">11h</span><span
+                        class="hour-badge">12h</span>
+                    <span class="hour-badge">13h</span><span class="hour-badge">14h</span><span
+                        class="hour-badge">15h</span>
+                    <span class="hour-badge">16h</span><span class="hour-badge">17h</span><span
+                        class="hour-badge">18h</span>
+                    <span class="hour-badge">20h</span><span class="hour-badge">21h</span><span
+                        class="hour-badge">22h</span>
                     <span class="hour-badge">23h</span>
                 </div>
             </details>
 
             <!-- EURUSD Trend -->
-            <details class="hours-details" style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--glass-border); border-radius: 12px; padding: 10px;">
-                <summary style="font-size: 13px; font-weight: 700; cursor: pointer; outline: none; display: flex; align-items: center; justify-content: space-between; list-style: none;">
+            <details class="hours-details"
+                style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--glass-border); border-radius: 12px; padding: 10px;">
+                <summary
+                    style="font-size: 13px; font-weight: 700; cursor: pointer; outline: none; display: flex; align-items: center; justify-content: space-between; list-style: none;">
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <span>📈 EURUSD Trend</span>
                         <span id="badge-status-eurusd" class="process-badge inactive">OFF</span>
@@ -497,14 +568,18 @@
                     </div>
                 </summary>
                 <div style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px;">
-                    <span class="hour-badge">06h</span><span class="hour-badge">12h</span><span class="hour-badge">13h</span>
-                    <span class="hour-badge">15h</span><span class="hour-badge">18h</span><span class="hour-badge">20h</span>
+                    <span class="hour-badge">06h</span><span class="hour-badge">12h</span><span
+                        class="hour-badge">13h</span>
+                    <span class="hour-badge">15h</span><span class="hour-badge">18h</span><span
+                        class="hour-badge">20h</span>
                 </div>
             </details>
 
             <!-- Gold Trend -->
-            <details class="hours-details" style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--glass-border); border-radius: 12px; padding: 10px;">
-                <summary style="font-size: 13px; font-weight: 700; cursor: pointer; outline: none; display: flex; align-items: center; justify-content: space-between; list-style: none;">
+            <details class="hours-details"
+                style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--glass-border); border-radius: 12px; padding: 10px;">
+                <summary
+                    style="font-size: 13px; font-weight: 700; cursor: pointer; outline: none; display: flex; align-items: center; justify-content: space-between; list-style: none;">
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <span>🏆 GOLD Trend</span>
                         <span id="badge-status-gold" class="process-badge inactive">OFF</span>
@@ -518,10 +593,14 @@
                     </div>
                 </summary>
                 <div style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px;">
-                    <span class="hour-badge">01h</span><span class="hour-badge">03h</span><span class="hour-badge">05h</span>
-                    <span class="hour-badge">06h</span><span class="hour-badge">07h</span><span class="hour-badge">08h</span>
-                    <span class="hour-badge">09h</span><span class="hour-badge">14h</span><span class="hour-badge">16h</span>
-                    <span class="hour-badge">17h</span><span class="hour-badge">20h</span><span class="hour-badge">21h</span>
+                    <span class="hour-badge">01h</span><span class="hour-badge">03h</span><span
+                        class="hour-badge">05h</span>
+                    <span class="hour-badge">06h</span><span class="hour-badge">07h</span><span
+                        class="hour-badge">08h</span>
+                    <span class="hour-badge">09h</span><span class="hour-badge">14h</span><span
+                        class="hour-badge">16h</span>
+                    <span class="hour-badge">17h</span><span class="hour-badge">20h</span><span
+                        class="hour-badge">21h</span>
                     <span class="hour-badge">23h</span>
                 </div>
             </details>
@@ -531,10 +610,12 @@
 
     <!-- Bottom Action Button Group -->
     <div style="margin-top: auto; padding-top: 20px; display: flex; gap: 10px;">
-        <button id="btn-cancel" class="btn-apply" style="flex: 1; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); color: var(--text-secondary);">
+        <button id="btn-cancel" class="btn-apply"
+            style="flex: 1; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); color: var(--text-secondary);">
             <i class="fa-solid fa-xmark"></i> Annuler
         </button>
-        <button id="btn-apply" class="btn-apply" style="flex: 2; background: linear-gradient(135deg, var(--accent-gold), #b45309); border: none; color: #ffffff; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);">
+        <button id="btn-apply" class="btn-apply"
+            style="flex: 2; background: linear-gradient(135deg, var(--accent-gold), #b45309); border: none; color: #ffffff; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);">
             <i class="fa-solid fa-bolt"></i> Appliquer
         </button>
     </div>
@@ -546,24 +627,24 @@
 
         // Extract parameters from URL Query String
         const params = new URLSearchParams(window.location.search);
-        
+
         const balance = parseFloat(params.get('balance') || '10000.00');
         const equity = parseFloat(params.get('equity') || '10000.00');
         const pnl = parseFloat(params.get('pnl') || '0.00');
-        
+
         const nas = params.get('nas100') || '🔴';
         const xau = params.get('xauusd') || '🔴';
         const eur = params.get('eurusd') || '🔴';
         const gld = params.get('gold') || '🔴';
         const mon = params.get('monitor') || '🔴';
         const sup = params.get('supervisor') || '🔴';
-        
+
         const tradesParam = params.get('trades') || '';
 
         // Apply HTML display values
         document.getElementById('val-balance').innerText = balance.toLocaleString('en-US', { minimumFractionDigits: 2 }) + '$';
         document.getElementById('val-equity').innerText = equity.toLocaleString('en-US', { minimumFractionDigits: 2 }) + '$';
-        
+
         const pnlEl = document.getElementById('val-pnl');
         if (pnl >= 0) {
             pnlEl.innerText = '+' + pnl.toLocaleString('en-US', { minimumFractionDigits: 2 }) + '$';
@@ -613,7 +694,7 @@
                 const profitSign = profit >= 0 ? '+' : '';
                 const typeClass = type === 'BUY' ? 'dot-green' : 'dot-red';
                 const typeLabelColor = type === 'BUY' ? 'var(--accent-green)' : 'var(--accent-red)';
-                
+
                 const tradeCard = document.createElement('div');
                 tradeCard.className = 'process-card';
                 tradeCard.style.padding = '10px 12px';
@@ -652,7 +733,7 @@
             const toggle = document.getElementById(`toggle-${bot.id}`);
             const badge = document.getElementById(`badge-status-${bot.id}`);
             const isActive = bot.val === '🟢';
-            
+
             if (toggle) {
                 toggle.checked = isActive;
                 // Add event listener to update the badge color in real time on the UI!
@@ -666,7 +747,7 @@
                     }
                 });
             }
-            
+
             if (badge) {
                 if (isActive) {
                     badge.innerText = 'ON';
@@ -681,6 +762,12 @@
         // Cancel / Close action
         document.getElementById('btn-cancel').addEventListener('click', () => {
             Telegram.WebApp.close();
+        });
+
+        // Navigation state preservation
+        document.getElementById('nav-backtest').addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = 'backtest.html' + window.location.search;
         });
 
         // Apply action (Sends data back to Telegram bot)
@@ -702,14 +789,14 @@
         // Live Broker MT5 Clock (EET/EEST) & Highlight Active Hour
         function updateActiveHours() {
             const now = new Date();
-            
+
             // Format to Eastern European Time (EET/EEST) used by FTMO and major brokers
             const brokerOptions = { timeZone: 'Europe/Athens', hour: 'numeric', minute: 'numeric', hour12: false };
             const brokerTimeStr = new Intl.DateTimeFormat('fr-FR', brokerOptions).format(now);
             const [bHourStr, bMinStr] = brokerTimeStr.split(':');
             const brokerHour = parseInt(bHourStr);
             const brokerMin = bMinStr.padStart(2, '0');
-            
+
             // Update clock display with actual Broker Server Time
             document.getElementById('utc-clock-badge').innerText = `Broker MT5 ${String(brokerHour).padStart(2, '0')}:${brokerMin}`;
 
@@ -725,7 +812,7 @@
                         badge.style.color = 'var(--accent-gold)';
                         badge.style.textShadow = '0 0 8px rgba(245, 158, 11, 0.6)';
                         badge.style.fontWeight = '700';
-                        
+
                         // Automatically expand the details accordion
                         const parentDetails = badge.closest('details');
                         if (parentDetails) {
@@ -747,9 +834,10 @@
                 }
             });
         }
-        
+
         updateActiveHours();
         setInterval(updateActiveHours, 10000); // refresh every 10 seconds
     </script>
 </body>
+
 </html>
