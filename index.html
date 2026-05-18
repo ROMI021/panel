@@ -163,8 +163,14 @@
             margin-bottom: 12px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: space-between;
             color: var(--text-secondary);
+        }
+
+        .process-title span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .process-grid {
@@ -181,6 +187,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            transition: background 0.3s ease;
         }
 
         .process-info {
@@ -207,87 +214,49 @@
             box-shadow: 0 0 8px var(--accent-red);
         }
 
-        /* Risk Slider Styling */
-        .slider-section {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        .slider-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .slider-title {
-            font-size: 14px;
+        /* Active Hours Badges */
+        .hour-badge {
+            font-size: 10px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            padding: 3px 6px;
+            color: var(--text-secondary);
             font-weight: 600;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            transition: all 0.2s ease;
         }
 
-        .slider-value {
-            font-size: 20px;
-            font-weight: 700;
+        .hours-details {
+            transition: all 0.3s ease;
+        }
+
+        .hours-details[open] summary i {
+            transform: rotate(180deg);
             color: var(--accent-gold);
-            background: rgba(245, 158, 11, 0.1);
-            padding: 4px 10px;
-            border-radius: 8px;
-            border: 1px solid rgba(245, 158, 11, 0.2);
         }
 
-        .range-slider {
-            width: 100%;
-            height: 6px;
-            background: #334155;
-            outline: none;
-            border-radius: 3px;
-            -webkit-appearance: none;
+        .hours-details summary i {
+            transition: transform 0.2s ease;
         }
 
-        .range-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--accent-gold);
-            cursor: pointer;
-            box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
-            transition: transform 0.1s;
-        }
-
-        .range-slider::-webkit-slider-thumb:active {
-            transform: scale(1.2);
-        }
-
-        .slider-hints {
-            display: flex;
-            justify-content: space-between;
-            font-size: 11px;
-            color: var(--text-secondary);
-        }
-
-        /* Dynamic Submit Button */
+        /* Close Button */
         .btn-apply {
-            background: linear-gradient(135deg, var(--accent-gold) 0%, #d97706 100%);
-            border: none;
-            color: white;
+            background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
             padding: 16px;
             border-radius: 14px;
-            font-size: 16px;
-            font-weight: 700;
+            font-size: 15px;
+            font-weight: 600;
             cursor: pointer;
             width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
             transition: filter 0.2s, transform 0.2s;
-            margin-top: auto;
+            margin-top: 10px;
         }
 
         .btn-apply:active {
@@ -305,7 +274,7 @@
                 <i class="fa-solid fa-crown logo-icon"></i>
                 <div>
                     <div class="title">TRADING ELITE</div>
-                    <div class="subtitle">Master Control Panel v3.5</div>
+                    <div class="subtitle">Master Control Panel v4.0</div>
                 </div>
             </div>
             <i class="fa-solid fa-server" style="color: var(--accent-green)"></i>
@@ -339,8 +308,7 @@
     <!-- Active Processes Section -->
     <div class="glass-card">
         <div class="process-title">
-            <i class="fa-solid fa-microchip"></i>
-            <span>Statut des Processus VPS</span>
+            <span><i class="fa-solid fa-microchip"></i> Statut des Processus VPS</span>
         </div>
         <div class="process-grid">
             <div class="process-card">
@@ -370,44 +338,89 @@
         </div>
     </div>
 
-    <!-- Risk Configuration Section -->
+    <!-- Trade History Section (Option 4) -->
     <div class="glass-card">
-        <div class="slider-section">
-            <div class="process-title" style="margin-bottom: 4px;">
-                <i class="fa-solid fa-shield-halved"></i>
-                <span>Configuration des Risques</span>
-            </div>
-            
-            <!-- NAS100 SMC Risk Slider -->
-            <div style="margin-top: 14px;">
-                <div class="slider-header" style="margin-bottom: 8px;">
-                    <span class="slider-title" style="font-size: 13px; font-weight: 500;"><i class="fa-solid fa-robot"></i> NAS100 SMC</span>
-                    <span class="slider-value" id="nas-slider-val" style="font-size: 16px; padding: 2px 8px;">0.5%</span>
-                </div>
-                <input type="range" id="nas-risk-slider" class="range-slider" min="0.1" max="2.0" step="0.1" value="0.5">
-            </div>
-
-            <!-- XAUUSD SMC Risk Slider -->
-            <div style="margin-top: 18px;">
-                <div class="slider-header" style="margin-bottom: 8px;">
-                    <span class="slider-title" style="font-size: 13px; font-weight: 500;"><i class="fa-solid fa-coins"></i> XAUUSD SMC</span>
-                    <span class="slider-value" id="xau-slider-val" style="font-size: 16px; padding: 2px 8px;">0.5%</span>
-                </div>
-                <input type="range" id="xau-risk-slider" class="range-slider" min="0.1" max="2.0" step="0.1" value="0.5">
-            </div>
-            
-            <div class="slider-hints" style="margin-top: 12px;">
-                <span>Sécurisé (0.1%)</span>
-                <span>Standard (0.5%)</span>
-                <span>Agressif (2.0%)</span>
-            </div>
+        <div class="process-title">
+            <span><i class="fa-solid fa-clock-rotate-left"></i> Historique Récent des Trades (MT5)</span>
+        </div>
+        <div id="trade-history-container" style="display: flex; flex-direction: column; gap: 8px;">
+            <!-- Les trades dynamiques seront injectés ici -->
         </div>
     </div>
 
-    <!-- Apply Dynamic Button -->
-    <button class="btn-apply" id="btn-submit">
-        <i class="fa-solid fa-bolt"></i>
-        Appliquer les Paramètres
+    <!-- Active Hours Section (Option 5) -->
+    <div class="glass-card">
+        <div class="process-title">
+            <span><i class="fa-solid fa-calendar-days"></i> ⏰ Plages Horaires Actives</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+            
+            <!-- NAS100 SMC -->
+            <details class="hours-details" style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--glass-border); border-radius: 12px; padding: 10px;">
+                <summary style="font-size: 13px; font-weight: 700; cursor: pointer; outline: none; display: flex; align-items: center; justify-content: space-between; list-style: none;">
+                    <span>🤖 NAS100 SMC</span>
+                    <i class="fa-solid fa-chevron-down" style="font-size: 10px; color: var(--text-secondary);"></i>
+                </summary>
+                <div style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px;">
+                    <span class="hour-badge">00h</span><span class="hour-badge">01h</span><span class="hour-badge">02h</span>
+                    <span class="hour-badge">03h</span><span class="hour-badge">04h</span><span class="hour-badge">07h</span>
+                    <span class="hour-badge">08h</span><span class="hour-badge">09h</span><span class="hour-badge">11h</span>
+                    <span class="hour-badge">12h</span><span class="hour-badge">13h</span><span class="hour-badge">14h</span>
+                    <span class="hour-badge">15h</span><span class="hour-badge">16h</span><span class="hour-badge">17h</span>
+                    <span class="hour-badge">20h</span><span class="hour-badge">23h</span>
+                </div>
+            </details>
+
+            <!-- XAUUSD SMC -->
+            <details class="hours-details" style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--glass-border); border-radius: 12px; padding: 10px;">
+                <summary style="font-size: 13px; font-weight: 700; cursor: pointer; outline: none; display: flex; align-items: center; justify-content: space-between; list-style: none;">
+                    <span>🥇 XAUUSD SMC</span>
+                    <i class="fa-solid fa-chevron-down" style="font-size: 10px; color: var(--text-secondary);"></i>
+                </summary>
+                <div style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px;">
+                    <span class="hour-badge">00h</span><span class="hour-badge">03h</span><span class="hour-badge">04h</span>
+                    <span class="hour-badge">07h</span><span class="hour-badge">08h</span><span class="hour-badge">09h</span>
+                    <span class="hour-badge">10h</span><span class="hour-badge">11h</span><span class="hour-badge">12h</span>
+                    <span class="hour-badge">13h</span><span class="hour-badge">14h</span><span class="hour-badge">15h</span>
+                    <span class="hour-badge">16h</span><span class="hour-badge">17h</span><span class="hour-badge">18h</span>
+                    <span class="hour-badge">20h</span><span class="hour-badge">21h</span><span class="hour-badge">22h</span>
+                    <span class="hour-badge">23h</span>
+                </div>
+            </details>
+
+            <!-- EURUSD Trend -->
+            <details class="hours-details" style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--glass-border); border-radius: 12px; padding: 10px;">
+                <summary style="font-size: 13px; font-weight: 700; cursor: pointer; outline: none; display: flex; align-items: center; justify-content: space-between; list-style: none;">
+                    <span>📈 EURUSD Trend</span>
+                    <i class="fa-solid fa-chevron-down" style="font-size: 10px; color: var(--text-secondary);"></i>
+                </summary>
+                <div style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px;">
+                    <span class="hour-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--accent-green); border-color: rgba(16, 185, 129, 0.2);">H24 (Sans restriction)</span>
+                </div>
+            </details>
+
+            <!-- Gold Trend -->
+            <details class="hours-details" style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--glass-border); border-radius: 12px; padding: 10px;">
+                <summary style="font-size: 13px; font-weight: 700; cursor: pointer; outline: none; display: flex; align-items: center; justify-content: space-between; list-style: none;">
+                    <span>🏆 GOLD Trend</span>
+                    <i class="fa-solid fa-chevron-down" style="font-size: 10px; color: var(--text-secondary);"></i>
+                </summary>
+                <div style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px;">
+                    <span class="hour-badge">01h</span><span class="hour-badge">03h</span><span class="hour-badge">05h</span>
+                    <span class="hour-badge">06h</span><span class="hour-badge">07h</span><span class="hour-badge">08h</span>
+                    <span class="hour-badge">09h</span><span class="hour-badge">14h</span><span class="hour-badge">16h</span>
+                    <span class="hour-badge">17h</span><span class="hour-badge">20h</span><span class="hour-badge">21h</span>
+                    <span class="hour-badge">23h</span>
+                </div>
+            </details>
+
+        </div>
+    </div>
+
+    <!-- Close Button -->
+    <button class="btn-apply" id="btn-close">
+        <i class="fa-solid fa-xmark"></i>
+        Fermer le Panneau
     </button>
 
     <script>
@@ -429,8 +442,7 @@
         const mon = params.get('monitor') || '🔴';
         const sup = params.get('supervisor') || '🔴';
         
-        const riskNas = parseFloat(params.get('risk_nas100') || params.get('risk') || '0.5');
-        const riskXau = parseFloat(params.get('risk_xauusd') || params.get('risk') || '0.5');
+        const tradesParam = params.get('trades') || '';
 
         // Apply HTML display values
         document.getElementById('val-balance').innerText = balance.toLocaleString('en-US', { minimumFractionDigits: 2 }) + '$';
@@ -472,34 +484,48 @@
         setDot('dot-monitor', mon);
         setDot('dot-supervisor', sup);
 
-        // Slider logic for NAS100
-        const nasSlider = document.getElementById('nas-risk-slider');
-        const nasSliderVal = document.getElementById('nas-slider-val');
-        nasSlider.value = riskNas;
-        nasSliderVal.innerText = riskNas.toFixed(1) + '%';
-        nasSlider.addEventListener('input', (e) => {
-            nasSliderVal.innerText = parseFloat(e.target.value).toFixed(1) + '%';
-        });
+        // Inject Trades History
+        const tradeContainer = document.getElementById('trade-history-container');
+        if (tradesParam) {
+            const trades = tradesParam.split(';');
+            trades.forEach(t => {
+                const parts = t.split('|');
+                if (parts.length < 4) return;
+                const [symbol, type, volume, profitStr] = parts;
+                const profit = parseFloat(profitStr);
+                const profitClass = profit >= 0 ? 'metric-value pnl-positive' : 'metric-value pnl-negative';
+                const profitSign = profit >= 0 ? '+' : '';
+                const typeClass = type === 'BUY' ? 'dot-green' : 'dot-red';
+                const typeLabelColor = type === 'BUY' ? 'var(--accent-green)' : 'var(--accent-red)';
+                
+                const tradeCard = document.createElement('div');
+                tradeCard.className = 'process-card';
+                tradeCard.style.padding = '10px 12px';
+                tradeCard.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span class="process-dot ${typeClass}"></span>
+                        <div>
+                            <div style="font-size: 13px; font-weight: 700; color: var(--text-primary);">${symbol}</div>
+                            <div style="font-size: 10px; color: var(--text-secondary); font-weight: 500;">
+                                <span style="color: ${typeLabelColor}; font-weight: 700;">${type}</span> • ${volume} Lot
+                            </div>
+                        </div>
+                    </div>
+                    <span class="${profitClass}" style="font-size: 14px; font-weight: 700;">${profitSign}${profit.toFixed(2)}$</span>
+                `;
+                tradeContainer.appendChild(tradeCard);
+            });
+        } else {
+            tradeContainer.innerHTML = `
+                <div style="text-align: center; color: var(--text-secondary); font-size: 11px; padding: 12px 0; background: rgba(15,23,42,0.2); border-radius: 12px; border: 1px dashed var(--glass-border);">
+                    <i class="fa-solid fa-folder-open" style="margin-bottom: 6px; font-size: 16px; display: block; color: var(--text-secondary);"></i>
+                    Aucun trade clôturé sur les 7 derniers jours
+                </div>
+            `;
+        }
 
-        // Slider logic for XAUUSD
-        const xauSlider = document.getElementById('xau-risk-slider');
-        const xauSliderVal = document.getElementById('xau-slider-val');
-        xauSlider.value = riskXau;
-        xauSliderVal.innerText = riskXau.toFixed(1) + '%';
-        xauSlider.addEventListener('input', (e) => {
-            xauSliderVal.innerText = parseFloat(e.target.value).toFixed(1) + '%';
-        });
-
-        // Submit action back to Telegram Bot via WebApp.sendData
-        document.getElementById('btn-submit').addEventListener('click', () => {
-            const valNas = parseFloat(nasSlider.value);
-            const valXau = parseFloat(xauSlider.value);
-            const dataToSend = {
-                action: "set_risk",
-                nas100: valNas,
-                xauusd: valXau
-            };
-            Telegram.WebApp.sendData(JSON.stringify(dataToSend));
+        // Close action
+        document.getElementById('btn-close').addEventListener('click', () => {
             Telegram.WebApp.close();
         });
     </script>
