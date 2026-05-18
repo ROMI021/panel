@@ -528,6 +528,34 @@
         document.getElementById('btn-close').addEventListener('click', () => {
             Telegram.WebApp.close();
         });
+
+        // Highlight Active Server Hour
+        const currentHour = parseInt(params.get('hour') !== null ? params.get('hour') : new Date().getHours());
+        const badges = document.querySelectorAll('.hour-badge');
+        badges.forEach(badge => {
+            const text = badge.innerText.trim();
+            if (text.endsWith('h')) {
+                const hVal = parseInt(text.replace('h', ''));
+                if (hVal === currentHour) {
+                    badge.style.background = 'rgba(245, 158, 11, 0.25)';
+                    badge.style.borderColor = 'var(--accent-gold)';
+                    badge.style.color = 'var(--accent-gold)';
+                    badge.style.textShadow = '0 0 8px rgba(245, 158, 11, 0.6)';
+                    badge.style.fontWeight = '700';
+                    
+                    // Automatically expand the details accordion
+                    const parentDetails = badge.closest('details');
+                    if (parentDetails) {
+                        parentDetails.open = true;
+                    }
+                }
+            } else if (text.includes('H24')) {
+                badge.style.background = 'rgba(245, 158, 11, 0.15)';
+                badge.style.borderColor = 'var(--accent-gold)';
+                badge.style.color = 'var(--accent-gold)';
+                badge.style.fontWeight = '700';
+            }
+        });
     </script>
 </body>
 </html>
