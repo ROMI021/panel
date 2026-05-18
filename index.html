@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Master Control Panel</title>
+    <!-- Google Fonts Outfit & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Telegram WebApp JS SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-blue: #3b82f6;
+            --accent-gold: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Premium Glassmorphism Container */
+        .glass-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 20px;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            margin-bottom: 16px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            font-size: 24px;
+            background: linear-gradient(135deg, var(--accent-gold) 0%, #d97706 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .title {
+            font-weight: 700;
+            font-size: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .subtitle {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Financial Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .metric-box {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .metric-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .metric-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .metric-value.pnl-positive {
+            color: var(--accent-green);
+        }
+
+        .metric-value.pnl-negative {
+            color: var(--accent-red);
+        }
+
+        /* Circular Progress Area */
+        .circle-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
+        .circle-label {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .circle-pnl-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .circle-pnl-value {
+            font-size: 26px;
+            font-weight: 700;
+        }
+
+        /* Process Grid */
+        .process-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+        }
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .process-card {
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .process-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .process-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .dot-green {
+            background-color: var(--accent-green);
+            box-shadow: 0 0 8px var(--accent-green);
+        }
+
+        .dot-red {
+            background-color: var(--accent-red);
+            box-shadow: 0 0 8px var(--accent-red);
+        }
+
+        /* Risk Slider Styling */
+        .slider-section {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .slider-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .slider-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent-gold);
+            background: rgba(245, 158, 11, 0.1);
+            padding: 4px 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .range-slider {
+            width: 100%;
+            height: 6px;
+            background: #334155;
+            outline: none;
+            border-radius: 3px;
+            -webkit-appearance: none;
+        }
+
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-gold);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+            transition: transform 0.1s;
+        }
+
+        .range-slider::-webkit-slider-thumb:active {
+            transform: scale(1.2);
+        }
+
+        .slider-hints {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        /* Dynamic Submit Button */
+        .btn-apply {
+            background: linear-gradient(135deg, var(--accent-gold) 0%, #d97706 100%);
+            border: none;
+            color: white;
+            padding: 16px;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
+            transition: filter 0.2s, transform 0.2s;
+            margin-top: auto;
+        }
+
+        .btn-apply:active {
+            transform: scale(0.98);
+            filter: brightness(0.9);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <div class="glass-card">
+        <div class="header">
+            <div class="logo-area">
+                <i class="fa-solid fa-crown logo-icon"></i>
+                <div>
+                    <div class="title">TRADING ELITE</div>
+                    <div class="subtitle">Master Control Panel v3.5</div>
+                </div>
+            </div>
+            <i class="fa-solid fa-server" style="color: var(--accent-green)"></i>
+        </div>
+
+        <!-- Financial Metrics Grid -->
+        <div class="metrics-grid">
+            <div class="metric-box">
+                <span class="metric-label">Solde Compte</span>
+                <span class="metric-value" id="val-balance">10,000.00$</span>
+            </div>
+            <div class="metric-box">
+                <span class="metric-label">Équité Réelle</span>
+                <span class="metric-value" id="val-equity">10,000.00$</span>
+            </div>
+        </div>
+
+        <!-- Radial PnL Progress Circle -->
+        <div class="circle-area">
+            <svg width="150" height="150">
+                <circle cx="75" cy="75" r="60" stroke="#334155" stroke-width="10" fill="transparent" />
+                <circle id="progress-circle" class="progress-ring-circle" cx="75" cy="75" r="60" stroke="var(--accent-green)" stroke-width="10" fill="transparent" stroke-dasharray="377" stroke-dashoffset="377" />
+            </svg>
+            <div class="circle-label">
+                <span class="circle-pnl-title">PnL Journalier</span>
+                <span class="circle-pnl-value" id="val-pnl">+0.00$</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Processes Section -->
+    <div class="glass-card">
+        <div class="process-title">
+            <i class="fa-solid fa-microchip"></i>
+            <span>Statut des Processus VPS</span>
+        </div>
+        <div class="process-grid">
+            <div class="process-card">
+                <span class="process-info"><i class="fa-solid fa-robot"></i> NAS100</span>
+                <span class="process-dot" id="dot-nas100"></span>
+            </div>
+            <div class="process-card">
+                <span class="process-info"><i class="fa-solid fa-coins"></i> XAUUSD</span>
+                <span class="process-dot" id="dot-xauusd"></span>
+            </div>
+            <div class="process-card">
+                <span class="process-info"><i class="fa-solid fa-chart-line"></i> EURUSD</span>
+                <span class="process-dot" id="dot-eurusd"></span>
+            </div>
+            <div class="process-card">
+                <span class="process-info"><i class="fa-solid fa-gem"></i> GOLD Trend</span>
+                <span class="process-dot" id="dot-gold"></span>
+            </div>
+            <div class="process-card">
+                <span class="process-info"><i class="fa-solid fa-eye"></i> Monitor</span>
+                <span class="process-dot" id="dot-monitor"></span>
+            </div>
+            <div class="process-card">
+                <span class="process-info"><i class="fa-solid fa-user-shield"></i> Supervisor</span>
+                <span class="process-dot" id="dot-supervisor"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Risk Configuration Section -->
+    <div class="glass-card">
+        <div class="slider-section">
+            <div class="slider-header">
+                <span class="slider-title">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    Configuration du Risque
+                </span>
+                <span class="slider-value" id="slider-val">0.5%</span>
+            </div>
+            <input type="range" id="risk-slider" class="range-slider" min="0.1" max="2.0" step="0.1" value="0.5">
+            <div class="slider-hints">
+                <span>Sécurisé (0.1%)</span>
+                <span>Standard (0.5%)</span>
+                <span>Agressif (2.0%)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Apply Dynamic Button -->
+    <button class="btn-apply" id="btn-submit">
+        <i class="fa-solid fa-bolt"></i>
+        Appliquer les Paramètres
+    </button>
+
+    <script>
+        // Tell Telegram WebApp we are ready
+        Telegram.WebApp.ready();
+        Telegram.WebApp.expand();
+
+        // Extract parameters from URL Query String
+        const params = new URLSearchParams(window.location.search);
+        
+        const balance = parseFloat(params.get('balance') || '10000.00');
+        const equity = parseFloat(params.get('equity') || '10000.00');
+        const pnl = parseFloat(params.get('pnl') || '0.00');
+        
+        const nas = params.get('nas100') || '🔴';
+        const xau = params.get('xauusd') || '🔴';
+        const eur = params.get('eurusd') || '🔴';
+        const gld = params.get('gold') || '🔴';
+        const mon = params.get('monitor') || '🔴';
+        const sup = params.get('supervisor') || '🔴';
+        
+        const risk = parseFloat(params.get('risk') || '0.5');
+
+        // Apply HTML display values
+        document.getElementById('val-balance').innerText = balance.toLocaleString('en-US', { minimumFractionDigits: 2 }) + '$';
+        document.getElementById('val-equity').innerText = equity.toLocaleString('en-US', { minimumFractionDigits: 2 }) + '$';
+        
+        const pnlEl = document.getElementById('val-pnl');
+        if (pnl >= 0) {
+            pnlEl.innerText = '+' + pnl.toLocaleString('en-US', { minimumFractionDigits: 2 }) + '$';
+            pnlEl.className = 'circle-pnl-value pnl-positive';
+        } else {
+            pnlEl.innerText = pnl.toLocaleString('en-US', { minimumFractionDigits: 2 }) + '$';
+            pnlEl.className = 'circle-pnl-value pnl-negative';
+        }
+
+        // Circular Radial Ring Logic
+        // Radius = 60, Circumference = 2 * PI * r = 377
+        const circle = document.getElementById('progress-circle');
+        const totalTarget = balance * 0.10; // Target is 10% of Balance (FTMO Challenge Phase 1)
+        const percent = Math.min(100, Math.max(0, (pnl / totalTarget) * 100));
+        const offset = 377 - (percent / 100) * 377;
+        circle.setAttribute('stroke-dashoffset', offset);
+        if (pnl < 0) {
+            circle.setAttribute('stroke', 'var(--accent-red)');
+        }
+
+        // Apply Process Status dots
+        const setDot = (id, status) => {
+            const el = document.getElementById(id);
+            if (status.includes('🟢')) {
+                el.className = 'process-dot dot-green';
+            } else {
+                el.className = 'process-dot dot-red';
+            }
+        };
+        setDot('dot-nas100', nas);
+        setDot('dot-xauusd', xau);
+        setDot('dot-eurusd', eur);
+        setDot('dot-gold', gld);
+        setDot('dot-monitor', mon);
+        setDot('dot-supervisor', sup);
+
+        // Slider logic
+        const slider = document.getElementById('risk-slider');
+        const sliderVal = document.getElementById('slider-val');
+        slider.value = risk;
+        sliderVal.innerText = risk.toFixed(1) + '%';
+
+        slider.addEventListener('input', (e) => {
+            sliderVal.innerText = parseFloat(e.target.value).toFixed(1) + '%';
+        });
+
+        // Submit action back to Telegram Bot via WebApp.sendData
+        document.getElementById('btn-submit').addEventListener('click', () => {
+            const selectedRisk = parseFloat(slider.value);
+            const dataToSend = {
+                action: "set_risk",
+                value: selectedRisk
+            };
+            Telegram.WebApp.sendData(JSON.stringify(dataToSend));
+            Telegram.WebApp.close();
+        });
+    </script>
+</body>
+</html>
