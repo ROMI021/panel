@@ -450,8 +450,9 @@
             // Strategy grouping
             const stratStats = {};
             if (typeof STRATEGY_CONFIG !== 'undefined' && STRATEGY_CONFIG.strategies) {
-                STRATEGY_CONFIG.strategies.forEach(s => {
-                    stratStats[s.key] = { label: s.name, asset: s.asset, count: 0, wins: 0, losses: 0, be: 0, pnl: 0 };
+                Object.keys(STRATEGY_CONFIG.strategies).forEach(key => {
+                    const s = STRATEGY_CONFIG.strategies[key];
+                    stratStats[key] = { label: s.label || key, asset: s.asset || '', count: 0, wins: 0, losses: 0, be: 0, pnl: 0 };
                 });
             }
 
