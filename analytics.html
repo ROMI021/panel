@@ -401,7 +401,7 @@
 
         // Main initial setup
         window.addEventListener('DOMContentLoaded', () => {
-            if (typeof TRADES_DATA === 'undefined') {
+            if (typeof ALL_TRADES === 'undefined') {
                 alert("Données trades_data.js introuvables ! Exécutez le pipeline de backtest pour générer la WebApp.");
                 return;
             }
@@ -410,7 +410,7 @@
 
         function runAnalysis(monthsPreset) {
             // 1. Filter trades by period
-            let tradesSortedExit = TRADES_DATA.slice().sort((a, b) => a.x.localeCompare(b.x));
+            let tradesSortedExit = ALL_TRADES.slice().sort((a, b) => a.x.localeCompare(b.x));
             if (tradesSortedExit.length === 0) return;
 
             const maxDate = new Date(tradesSortedExit[tradesSortedExit.length - 1].x);
