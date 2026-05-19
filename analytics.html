@@ -467,8 +467,10 @@
                 if (equity > maxEquity) maxEquity = equity;
                 const dd = maxEquity - equity;
                 const ddPct = (dd / maxEquity) * 100;
-                if (dd > maxDDVal) maxDDVal = dd;
-                if (ddPct > maxDDPct) maxDDPct = ddPct;
+                if (dd > maxDDVal) {
+                    maxDDVal = dd;
+                    maxDDPct = ddPct;
+                }
 
                 equityPoints.push({ time: t.x, balance: equity, dd: dd });
 
