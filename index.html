@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr">
 
 <head>
@@ -386,7 +386,7 @@
             <i class="fa-solid fa-gauge-high"></i> Live Monitor
         </div>
         <a id="nav-backtest" href="backtest.html" class="nav-tab">
-            <i class="fa-solid fa-chart-line"></i> Backtests Élite
+            <i class="fa-solid fa-chart-line"></i> Backtests Ã‰lite
         </a>
     </div>
 
@@ -410,7 +410,7 @@
                 <span class="metric-value" id="val-balance">10,000.00$</span>
             </div>
             <div class="metric-box">
-                <span class="metric-label">Équité Réelle</span>
+                <span class="metric-label">Ã‰quitÃ© RÃ©elle</span>
                 <span class="metric-value" id="val-equity">10,000.00$</span>
             </div>
         </div>
@@ -428,6 +428,20 @@
                 <span class="circle-pnl-value" id="val-pnl">+0.00$</span>
             </div>
         </div>
+    </div>
+
+    <!-- Coordination Or + Risque -->
+    <div class="glass-card">
+        <div class="process-title">
+            <span><i class="fa-solid fa-link"></i> Coordination Or (XAUUSD)</span>
+        </div>
+        <p id="xau-slot-status" style="font-size: 13px; margin-bottom: 8px;">Chargementâ€¦</p>
+        <p style="font-size: 10px; color: var(--text-secondary);">Une seule position or Ã  la fois â€” heure serveur MT5.</p>
+    </div>
+
+    <div class="glass-card">
+        <div class="process-title"><span><i class="fa-solid fa-shield-halved"></i> Risque & FTMO</span></div>
+        <div id="risk-ftmo-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 11px;"></div>
     </div>
 
     <!-- Active Processes Section -->
@@ -466,10 +480,10 @@
     <!-- Trade History Section (Option 4) -->
     <div class="glass-card">
         <div class="process-title">
-            <span><i class="fa-solid fa-clock-rotate-left"></i> Historique Récent des Trades (MT5)</span>
+            <span><i class="fa-solid fa-clock-rotate-left"></i> Historique RÃ©cent des Trades (MT5)</span>
         </div>
         <div id="trade-history-container" style="display: flex; flex-direction: column; gap: 8px;">
-            <!-- Les trades dynamiques seront injectés ici -->
+            <!-- Les trades dynamiques seront injectÃ©s ici -->
         </div>
     </div>
 
@@ -477,9 +491,9 @@
     <div class="glass-card">
         <div class="process-title"
             style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-            <span><i class="fa-solid fa-calendar-days"></i> Plages Horaires Actives</span>
-            <span id="utc-clock-badge"
-                style="font-size: 10px; font-weight: 700; color: var(--accent-gold); background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); padding: 2px 8px; border-radius: 20px;">UTC
+            <span><i class="fa-solid fa-calendar-days"></i> Plages Horaires (heure serveur MT5)</span>
+            <span id="server-clock-badge"
+                style="font-size: 10px; font-weight: 700; color: var(--accent-gold); background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); padding: 2px 8px; border-radius: 20px;">Serveur MT5
                 --:--</span>
         </div>
         <div style="display: flex; flex-direction: column; gap: 8px;">
@@ -490,7 +504,7 @@
                 <summary
                     style="font-size: 13px; font-weight: 700; cursor: pointer; outline: none; display: flex; align-items: center; justify-content: space-between; list-style: none;">
                     <div style="display: flex; align-items: center; gap: 8px;">
-                        <span>🤖 NAS100 SMC</span>
+                        <span>NAS100 SMC</span>
                         <span id="badge-status-nas100" class="process-badge inactive">OFF</span>
                     </div>
                     <div style="display: flex; align-items: center; gap: 10px;">
@@ -501,19 +515,7 @@
                         <i class="fa-solid fa-chevron-down" style="font-size: 10px; color: var(--text-secondary);"></i>
                     </div>
                 </summary>
-                <div style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px;">
-                    <span class="hour-badge">00h</span><span class="hour-badge">01h</span><span
-                        class="hour-badge">02h</span>
-                    <span class="hour-badge">03h</span><span class="hour-badge">04h</span><span
-                        class="hour-badge">07h</span>
-                    <span class="hour-badge">08h</span><span class="hour-badge">09h</span><span
-                        class="hour-badge">11h</span>
-                    <span class="hour-badge">12h</span><span class="hour-badge">13h</span><span
-                        class="hour-badge">14h</span>
-                    <span class="hour-badge">15h</span><span class="hour-badge">16h</span><span
-                        class="hour-badge">17h</span>
-                    <span class="hour-badge">20h</span><span class="hour-badge">23h</span>
-                </div>
+                <div id="hours-badges-nas100" class="hours-badges-wrap" style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px;"></div>
             </details>
 
             <!-- XAUUSD SMC -->
@@ -522,7 +524,7 @@
                 <summary
                     style="font-size: 13px; font-weight: 700; cursor: pointer; outline: none; display: flex; align-items: center; justify-content: space-between; list-style: none;">
                     <div style="display: flex; align-items: center; gap: 8px;">
-                        <span>🥇 XAUUSD SMC</span>
+                        <span>XAUUSD SMC</span>
                         <span id="badge-status-xauusd" class="process-badge inactive">OFF</span>
                     </div>
                     <div style="display: flex; align-items: center; gap: 10px;">
@@ -533,21 +535,7 @@
                         <i class="fa-solid fa-chevron-down" style="font-size: 10px; color: var(--text-secondary);"></i>
                     </div>
                 </summary>
-                <div style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px;">
-                    <span class="hour-badge">00h</span><span class="hour-badge">03h</span><span
-                        class="hour-badge">04h</span>
-                    <span class="hour-badge">07h</span><span class="hour-badge">08h</span><span
-                        class="hour-badge">09h</span>
-                    <span class="hour-badge">10h</span><span class="hour-badge">11h</span><span
-                        class="hour-badge">12h</span>
-                    <span class="hour-badge">13h</span><span class="hour-badge">14h</span><span
-                        class="hour-badge">15h</span>
-                    <span class="hour-badge">16h</span><span class="hour-badge">17h</span><span
-                        class="hour-badge">18h</span>
-                    <span class="hour-badge">20h</span><span class="hour-badge">21h</span><span
-                        class="hour-badge">22h</span>
-                    <span class="hour-badge">23h</span>
-                </div>
+                <div id="hours-badges-xauusd" class="hours-badges-wrap" style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px;"></div>
             </details>
 
             <!-- EURUSD Trend -->
@@ -556,7 +544,7 @@
                 <summary
                     style="font-size: 13px; font-weight: 700; cursor: pointer; outline: none; display: flex; align-items: center; justify-content: space-between; list-style: none;">
                     <div style="display: flex; align-items: center; gap: 8px;">
-                        <span>📈 EURUSD Trend</span>
+                        <span>EURUSD Trend</span>
                         <span id="badge-status-eurusd" class="process-badge inactive">OFF</span>
                     </div>
                     <div style="display: flex; align-items: center; gap: 10px;">
@@ -567,12 +555,7 @@
                         <i class="fa-solid fa-chevron-down" style="font-size: 10px; color: var(--text-secondary);"></i>
                     </div>
                 </summary>
-                <div style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px;">
-                    <span class="hour-badge">06h</span><span class="hour-badge">12h</span><span
-                        class="hour-badge">13h</span>
-                    <span class="hour-badge">15h</span><span class="hour-badge">18h</span><span
-                        class="hour-badge">20h</span>
-                </div>
+                <div id="hours-badges-eurusd" class="hours-badges-wrap" style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px;"></div>
             </details>
 
             <!-- Gold Trend -->
@@ -581,7 +564,7 @@
                 <summary
                     style="font-size: 13px; font-weight: 700; cursor: pointer; outline: none; display: flex; align-items: center; justify-content: space-between; list-style: none;">
                     <div style="display: flex; align-items: center; gap: 8px;">
-                        <span>🏆 GOLD Trend</span>
+                        <span>GOLD Trend</span>
                         <span id="badge-status-gold" class="process-badge inactive">OFF</span>
                     </div>
                     <div style="display: flex; align-items: center; gap: 10px;">
@@ -592,17 +575,7 @@
                         <i class="fa-solid fa-chevron-down" style="font-size: 10px; color: var(--text-secondary);"></i>
                     </div>
                 </summary>
-                <div style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px;">
-                    <span class="hour-badge">01h</span><span class="hour-badge">03h</span><span
-                        class="hour-badge">05h</span>
-                    <span class="hour-badge">06h</span><span class="hour-badge">07h</span><span
-                        class="hour-badge">08h</span>
-                    <span class="hour-badge">09h</span><span class="hour-badge">14h</span><span
-                        class="hour-badge">16h</span>
-                    <span class="hour-badge">17h</span><span class="hour-badge">20h</span><span
-                        class="hour-badge">21h</span>
-                    <span class="hour-badge">23h</span>
-                </div>
+                <div id="hours-badges-gold" class="hours-badges-wrap" style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px;"></div>
             </details>
 
         </div>
@@ -620,224 +593,8 @@
         </button>
     </div>
 
-    <script>
-        // Tell Telegram WebApp we are ready
-        Telegram.WebApp.ready();
-        Telegram.WebApp.expand();
-
-        // Extract parameters from URL Query String
-        const params = new URLSearchParams(window.location.search);
-
-        const balance = parseFloat(params.get('balance') || '10000.00');
-        const equity = parseFloat(params.get('equity') || '10000.00');
-        const pnl = parseFloat(params.get('pnl') || '0.00');
-
-        const nas = params.get('nas100') || '🔴';
-        const xau = params.get('xauusd') || '🔴';
-        const eur = params.get('eurusd') || '🔴';
-        const gld = params.get('gold') || '🔴';
-        const mon = params.get('monitor') || '🔴';
-        const sup = params.get('supervisor') || '🔴';
-
-        const tradesParam = params.get('trades') || '';
-
-        // Apply HTML display values
-        document.getElementById('val-balance').innerText = balance.toLocaleString('en-US', { minimumFractionDigits: 2 }) + '$';
-        document.getElementById('val-equity').innerText = equity.toLocaleString('en-US', { minimumFractionDigits: 2 }) + '$';
-
-        const pnlEl = document.getElementById('val-pnl');
-        if (pnl >= 0) {
-            pnlEl.innerText = '+' + pnl.toLocaleString('en-US', { minimumFractionDigits: 2 }) + '$';
-            pnlEl.className = 'circle-pnl-value pnl-positive';
-        } else {
-            pnlEl.innerText = pnl.toLocaleString('en-US', { minimumFractionDigits: 2 }) + '$';
-            pnlEl.className = 'circle-pnl-value pnl-negative';
-        }
-
-        // Circular Radial Ring Logic
-        // Radius = 60, Circumference = 2 * PI * r = 377
-        const circle = document.getElementById('progress-circle');
-        const totalTarget = balance * 0.10; // Target is 10% of Balance (FTMO Challenge Phase 1)
-        const percent = Math.min(100, Math.max(0, (pnl / totalTarget) * 100));
-        const offset = 377 - (percent / 100) * 377;
-        circle.setAttribute('stroke-dashoffset', offset);
-        if (pnl < 0) {
-            circle.setAttribute('stroke', 'var(--accent-red)');
-        }
-
-        // Apply Process Status dots
-        const setDot = (id, status) => {
-            const el = document.getElementById(id);
-            if (status.includes('🟢')) {
-                el.className = 'process-dot dot-green';
-            } else {
-                el.className = 'process-dot dot-red';
-            }
-        };
-        setDot('dot-nas100', nas);
-        setDot('dot-xauusd', xau);
-        setDot('dot-eurusd', eur);
-        setDot('dot-gold', gld);
-        setDot('dot-monitor', mon);
-        setDot('dot-supervisor', sup);
-
-        // Inject Trades History
-        const tradeContainer = document.getElementById('trade-history-container');
-        if (tradesParam) {
-            const trades = tradesParam.split(';');
-            trades.forEach(t => {
-                const parts = t.split('|');
-                if (parts.length < 4) return;
-                const [symbol, type, volume, profitStr] = parts;
-                const profit = parseFloat(profitStr);
-                const profitClass = profit >= 0 ? 'metric-value pnl-positive' : 'metric-value pnl-negative';
-                const profitSign = profit >= 0 ? '+' : '';
-                const typeClass = type === 'BUY' ? 'dot-green' : 'dot-red';
-                const typeLabelColor = type === 'BUY' ? 'var(--accent-green)' : 'var(--accent-red)';
-
-                const tradeCard = document.createElement('div');
-                tradeCard.className = 'process-card';
-                tradeCard.style.padding = '10px 12px';
-                tradeCard.innerHTML = `
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <span class="process-dot ${typeClass}"></span>
-                        <div>
-                            <div style="font-size: 13px; font-weight: 700; color: var(--text-primary);">${symbol}</div>
-                            <div style="font-size: 10px; color: var(--text-secondary); font-weight: 500;">
-                                <span style="color: ${typeLabelColor}; font-weight: 700;">${type}</span> • ${volume} Lot
-                            </div>
-                        </div>
-                    </div>
-                    <span class="${profitClass}" style="font-size: 14px; font-weight: 700;">${profitSign}${profit.toFixed(2)}$</span>
-                `;
-                tradeContainer.appendChild(tradeCard);
-            });
-        } else {
-            tradeContainer.innerHTML = `
-                <div style="text-align: center; color: var(--text-secondary); font-size: 11px; padding: 12px 0; background: rgba(15,23,42,0.2); border-radius: 12px; border: 1px dashed var(--glass-border);">
-                    <i class="fa-solid fa-folder-open" style="margin-bottom: 6px; font-size: 16px; display: block; color: var(--text-secondary);"></i>
-                    Aucun trade clôturé sur les 7 derniers jours
-                </div>
-            `;
-        }
-
-        // Initialize Toggles & Status Badges based on URL parameters (🟢 = active, 🔴 = inactive)
-        const bots = [
-            { id: 'nas100', val: nas },
-            { id: 'xauusd', val: xau },
-            { id: 'eurusd', val: eur },
-            { id: 'gold', val: gld }
-        ];
-
-        bots.forEach(bot => {
-            const toggle = document.getElementById(`toggle-${bot.id}`);
-            const badge = document.getElementById(`badge-status-${bot.id}`);
-            const isActive = bot.val === '🟢';
-
-            if (toggle) {
-                toggle.checked = isActive;
-                // Add event listener to update the badge color in real time on the UI!
-                toggle.addEventListener('change', () => {
-                    if (toggle.checked) {
-                        badge.innerText = 'ON';
-                        badge.className = 'process-badge active';
-                    } else {
-                        badge.innerText = 'OFF';
-                        badge.className = 'process-badge inactive';
-                    }
-                });
-            }
-
-            if (badge) {
-                if (isActive) {
-                    badge.innerText = 'ON';
-                    badge.className = 'process-badge active';
-                } else {
-                    badge.innerText = 'OFF';
-                    badge.className = 'process-badge inactive';
-                }
-            }
-        });
-
-        // Cancel / Close action
-        document.getElementById('btn-cancel').addEventListener('click', () => {
-            Telegram.WebApp.close();
-        });
-
-        // Navigation state preservation
-        document.getElementById('nav-backtest').addEventListener('click', (e) => {
-            e.preventDefault();
-            window.location.href = 'backtest.html' + window.location.search;
-        });
-
-        // Apply action (Sends data back to Telegram bot)
-        document.getElementById('btn-apply').addEventListener('click', () => {
-            const payload = {
-                action: 'toggle_bots',
-                nas100: document.getElementById('toggle-nas100').checked,
-                xauusd: document.getElementById('toggle-xauusd').checked,
-                eurusd: document.getElementById('toggle-eurusd').checked,
-                gold: document.getElementById('toggle-gold').checked
-            };
-            try {
-                Telegram.WebApp.sendData(JSON.stringify(payload));
-            } catch (err) {
-                alert("⚠️ Action non disponible depuis ce bouton.\n\nVeuillez ouvrir le tableau de bord en cliquant sur le bouton permanent '📱 Ouvrir Master Panel' situé sur le clavier tout en bas de votre écran de chat pour pouvoir appliquer vos changements !");
-            }
-        });
-
-        // Live Broker MT5 Clock (EET/EEST) & Highlight Active Hour
-        function updateActiveHours() {
-            const now = new Date();
-
-            // Format to Eastern European Time (EET/EEST) used by FTMO and major brokers
-            const brokerOptions = { timeZone: 'Europe/Athens', hour: 'numeric', minute: 'numeric', hour12: false };
-            const brokerTimeStr = new Intl.DateTimeFormat('fr-FR', brokerOptions).format(now);
-            const [bHourStr, bMinStr] = brokerTimeStr.split(':');
-            const brokerHour = parseInt(bHourStr);
-            const brokerMin = bMinStr.padStart(2, '0');
-
-            // Update clock display with actual Broker Server Time
-            document.getElementById('utc-clock-badge').innerText = `Broker MT5 ${String(brokerHour).padStart(2, '0')}:${brokerMin}`;
-
-            // Reset and highlight badges
-            const badges = document.querySelectorAll('.hour-badge');
-            badges.forEach(badge => {
-                const text = badge.innerText.trim();
-                if (text.endsWith('h')) {
-                    const hVal = parseInt(text.replace('h', ''));
-                    if (hVal === brokerHour) {
-                        badge.style.background = 'rgba(245, 158, 11, 0.25)';
-                        badge.style.borderColor = 'var(--accent-gold)';
-                        badge.style.color = 'var(--accent-gold)';
-                        badge.style.textShadow = '0 0 8px rgba(245, 158, 11, 0.6)';
-                        badge.style.fontWeight = '700';
-
-                        // Automatically expand the details accordion
-                        const parentDetails = badge.closest('details');
-                        if (parentDetails) {
-                            parentDetails.open = true;
-                        }
-                    } else {
-                        // Reset standard style
-                        badge.style.background = 'rgba(255, 255, 255, 0.05)';
-                        badge.style.borderColor = 'var(--glass-border)';
-                        badge.style.color = 'var(--text-secondary)';
-                        badge.style.textShadow = 'none';
-                        badge.style.fontWeight = '500';
-                    }
-                } else if (text.includes('H24')) {
-                    badge.style.background = 'rgba(245, 158, 11, 0.15)';
-                    badge.style.borderColor = 'var(--accent-gold)';
-                    badge.style.color = 'var(--accent-gold)';
-                    badge.style.fontWeight = '700';
-                }
-            });
-        }
-
-        updateActiveHours();
-        setInterval(updateActiveHours, 10000); // refresh every 10 seconds
-    </script>
+    <script src="strategy_config.js"></script>
+    <script src="panel_app.js"></script>
 </body>
 
 </html>

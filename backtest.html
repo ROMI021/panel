@@ -11,6 +11,7 @@
     <!-- Telegram WebApp JS SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <!-- Data Source -->
+    <script src="strategy_config.js"></script>
     <script src="trades_data.js"></script>
     <style>
         :root {
@@ -650,7 +651,7 @@
             <i class="fa-solid fa-chevron-down" id="arrow-heatmap"></i>
         </div>
         <div class="accordion-content" id="content-heatmap">
-            <label class="form-label">Heures Actives (Broker EET/EEST) vs Jours ouvrés</label>
+            <label class="form-label">Heures actives (heure serveur MT5) vs jours ouvrés</label>
             <div class="heatmap-container" id="heatmap-grid-container">
                 <!-- Header Hours -->
                 <div class="heatmap-header-row" id="heatmap-header-hours">
@@ -765,6 +766,9 @@
             <i class="fa-solid fa-chevron-down" id="arrow-collision"></i>
         </div>
         <div class="accordion-content" id="content-collision">
+            <p style="font-size: 11px; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4;">
+                Heures en <strong>heure serveur MT5</strong>. Trades or filtrés comme en live (une seule position XAUUSD SMC ou Gold Trend).
+            </p>
             <div class="accordion-row">
                 <span>Nombre de Collisions Détectées</span>
                 <span id="stat-collision-count" style="color: var(--accent-gold); font-size: 13px;">-</span>
@@ -1366,13 +1370,24 @@
             // Render Collisions Table
             const tableCollisionBody = document.getElementById('table-collision-body');
             tableCollisionBody.innerHTML = '';
+            const riskMap = (typeof STRATEGY_CONFIG !== 'undefined') ? STRATEGY_CONFIG.riskByStrategyKey : { nas100: 0.5, xauusd: 0.5, gold: 1, eurusd: 1 };
+            const estimateRisk = (labels) => labels.reduce((sum, label) => {
+                const u = String(label).toUpperCase();
+                if (u.includes('NAS')) return sum + (riskMap.nas100 || 0.5);
+                if (u.includes('XAU') || u.includes('SMC')) return sum + (riskMap.xauusd || 0.5);
+                if (u.includes('GOLD')) return sum + (riskMap.gold || 1);
+                if (u.includes('EUR')) return sum + (riskMap.eurusd || 1);
+                return sum + 0.5;
+            }, 0);
+
             hourlyCollisions.slice().reverse().forEach(coll => {
                 const tr = document.createElement('tr');
-                const estRisk = coll.strategies.length * 0.5;
+                const estRisk = estimateRisk(coll.strategies);
+                const hasGoldPair = coll.strategies.some(s => /GOLD|XAU/i.test(s)) && coll.strategies.length >= 2;
                 tr.innerHTML = `
                     <td class="text-bold">${coll.time}</td>
                     <td>${coll.numTrades}</td>
-                    <td class="text-secondary">${coll.strategies.join(', ')}</td>
+                    <td class="text-secondary">${coll.strategies.join(', ')}${hasGoldPair ? ' <span style="opacity:0.7">(or)</span>' : ''}</td>
                     <td>${estRisk.toFixed(1)}%</td>
                     <td class="text-bold ${coll.pnl >= 0 ? 'text-green' : 'text-red'}">${coll.pnl >= 0 ? '+' : ''}${coll.pnl.toFixed(2)} $</td>
                 `;
