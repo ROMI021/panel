@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /
+
+# Panel privé - Tableau de bord de trading personnel
+# Private dashboard - No indexing allowed
