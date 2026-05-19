@@ -516,6 +516,251 @@
             transform: scale(0.98);
             box-shadow: 0 2px 10px rgba(245, 158, 11, 0.15);
         }
+
+        /* Premium Dashboard Widgets & Grids */
+        .monthly-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .monthly-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .monthly-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: transparent;
+        }
+
+        .monthly-card.positive::before {
+            background: linear-gradient(90deg, var(--accent-green), #10b981);
+        }
+
+        .monthly-card.negative::before {
+            background: linear-gradient(90deg, var(--accent-red), #ef4444);
+        }
+
+        .monthly-card:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .monthly-header {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            font-weight: 700;
+        }
+
+        .monthly-pnl {
+            font-size: 15px;
+            font-weight: 800;
+            margin: 2px 0;
+        }
+
+        .monthly-sub {
+            display: flex;
+            justify-content: space-between;
+            font-size: 9px;
+            color: var(--text-secondary);
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            padding-top: 4px;
+        }
+
+        .monthly-badge {
+            align-self: flex-start;
+            font-size: 8px;
+            padding: 2px 6px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+
+        /* Strategy Cards Grid */
+        .strategy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 12px;
+            margin-top: 5px;
+        }
+
+        .strategy-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .strategy-card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.04);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .strategy-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .strategy-card-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .strategy-card-pnl {
+            font-size: 14px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Micro Infographic Bars */
+        .infographic-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            margin-bottom: 8px;
+            font-size: 11px;
+            gap: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .infographic-row:hover {
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(255, 255, 255, 0.06);
+        }
+
+        .infographic-label {
+            font-weight: 700;
+            width: 70px;
+            flex-shrink: 0;
+        }
+
+        .infographic-bar-container {
+            flex-grow: 1;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.02);
+        }
+
+        .infographic-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s ease-in-out;
+            background: linear-gradient(90deg, #3b82f6, #10b981);
+        }
+
+        .infographic-stats {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 140px;
+            justify-content: flex-end;
+            flex-shrink: 0;
+        }
+
+        .infographic-wr {
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .infographic-pnl {
+            font-weight: 800;
+            text-align: right;
+            width: 75px;
+        }
+
+        /* Advanced Stats Grid Dashboard style */
+        .advanced-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .advanced-box {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .advanced-box:hover {
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(255, 255, 255, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .advanced-box-label {
+            font-size: 10px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .advanced-box-value {
+            font-size: 14px;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .advanced-box.highlight-green {
+            background: rgba(16, 185, 129, 0.02);
+            border-color: rgba(16, 185, 129, 0.15);
+        }
+
+        .advanced-box.highlight-red {
+            background: rgba(239, 68, 68, 0.02);
+            border-color: rgba(239, 68, 68, 0.15);
+        }
+
+        .advanced-box.highlight-gold {
+            background: rgba(245, 158, 11, 0.02);
+            border-color: rgba(245, 158, 11, 0.15);
+        }
     </style>
 </head>
 
@@ -528,6 +773,9 @@
         <div id="nav-backtest" class="nav-tab active">
             <i class="fa-solid fa-chart-line"></i> Backtests Élite
         </div>
+        <a id="nav-analytics" href="analytics.html" class="nav-tab">
+            <i class="fa-solid fa-chart-pie"></i> Analyses Graphiques
+        </a>
     </div>
 
     <!-- Header Logo & Identity -->
@@ -672,19 +920,7 @@
             <i class="fa-solid fa-chevron-down" id="arrow-monthly"></i>
         </div>
         <div class="accordion-content" id="content-monthly">
-            <table class="glass-table">
-                <thead>
-                    <tr>
-                        <th>Mois</th>
-                        <th>PnL ($)</th>
-                        <th>Rendement / Initial</th>
-                        <th>Rendement Composé</th>
-                        <th>Trades</th>
-                        <th>Solde Fin</th>
-                    </tr>
-                </thead>
-                <tbody id="table-monthly-body"></tbody>
-            </table>
+            <div id="table-monthly-body" class="monthly-grid"></div>
         </div>
     </div>
 
@@ -695,21 +931,7 @@
             <i class="fa-solid fa-chevron-down" id="arrow-strategy"></i>
         </div>
         <div class="accordion-content" id="content-strategy">
-            <table class="glass-table">
-                <thead>
-                    <tr>
-                        <th>Stratégie</th>
-                        <th>Actif</th>
-                        <th>Trades</th>
-                        <th>Wins</th>
-                        <th>BE</th>
-                        <th>Loss</th>
-                        <th>PnL NET</th>
-                        <th>Win Rate</th>
-                    </tr>
-                </thead>
-                <tbody id="table-strategy-body"></tbody>
-            </table>
+            <div id="table-strategy-body" class="strategy-grid"></div>
         </div>
     </div>
 
@@ -720,19 +942,7 @@
             <i class="fa-solid fa-chevron-down" id="arrow-weekday"></i>
         </div>
         <div class="accordion-content" id="content-weekday">
-            <table class="glass-table">
-                <thead>
-                    <tr>
-                        <th>Jour</th>
-                        <th>Wins</th>
-                        <th>Loss</th>
-                        <th>BE</th>
-                        <th>Win Rate</th>
-                        <th>PnL NET</th>
-                    </tr>
-                </thead>
-                <tbody id="table-weekday-body"></tbody>
-            </table>
+            <div id="table-weekday-body" style="margin-top: 5px; display: flex; flex-direction: column; gap: 2px;"></div>
         </div>
     </div>
 
@@ -743,19 +953,7 @@
             <i class="fa-solid fa-chevron-down" id="arrow-hourly"></i>
         </div>
         <div class="accordion-content" id="content-hourly">
-            <table class="glass-table">
-                <thead>
-                    <tr>
-                        <th>Heure</th>
-                        <th>Wins</th>
-                        <th>Loss</th>
-                        <th>BE</th>
-                        <th>Win Rate</th>
-                        <th>PnL NET</th>
-                    </tr>
-                </thead>
-                <tbody id="table-hourly-body"></tbody>
-            </table>
+            <div id="table-hourly-body" style="margin-top: 5px; display: flex; flex-direction: column; gap: 2px;"></div>
         </div>
     </div>
 
@@ -804,37 +1002,39 @@
             <i class="fa-solid fa-chevron-down" id="arrow-advanced"></i>
         </div>
         <div class="accordion-content" id="content-advanced">
-            <div class="accordion-row">
-                <span>Trades Exécutés</span>
-                <span id="stat-total-trades">-</span>
-            </div>
-            <div class="accordion-row">
-                <span>Wins / Pertes / BE</span>
-                <span id="stat-win-loss-be">-</span>
-            </div>
-            <div class="accordion-row">
-                <span>Gain Moyen / Perte Moyenne</span>
-                <span id="stat-avg-win-loss">-</span>
-            </div>
-            <div class="accordion-row">
-                <span>Plus gros gain / Plus grosse perte</span>
-                <span id="stat-biggest-win-loss">-</span>
-            </div>
-            <div class="accordion-row">
-                <span>Série de gains consécutifs</span>
-                <span id="stat-win-streak" style="color: var(--accent-green);">-</span>
-            </div>
-            <div class="accordion-row">
-                <span>Série de pertes consécutives</span>
-                <span id="stat-loss-streak" style="color: var(--accent-red);">-</span>
-            </div>
-            <div class="accordion-row">
-                <span>Facteur de Récupération (Recovery)</span>
-                <span id="stat-recovery-factor">-</span>
-            </div>
-            <div class="accordion-row">
-                <span>Espérance Mathématique (Expectancy)</span>
-                <span id="stat-expectancy">-</span>
+            <div class="advanced-grid">
+                <div class="advanced-box">
+                    <span class="advanced-box-label">📊 Trades Exécutés</span>
+                    <span class="advanced-box-value" id="stat-total-trades">-</span>
+                </div>
+                <div class="advanced-box">
+                    <span class="advanced-box-label">🎯 Répartition (W / L / BE)</span>
+                    <span class="advanced-box-value" id="stat-win-loss-be">-</span>
+                </div>
+                <div class="advanced-box highlight-green">
+                    <span class="advanced-box-label">🟢 Gain / Perte Moy.</span>
+                    <span class="advanced-box-value" id="stat-avg-win-loss">-</span>
+                </div>
+                <div class="advanced-box">
+                    <span class="advanced-box-label">🏆 Plus Gros Gain / Perte</span>
+                    <span class="advanced-box-value" id="stat-biggest-win-loss">-</span>
+                </div>
+                <div class="advanced-box highlight-green">
+                    <span class="advanced-box-label">🔥 Série de gains max</span>
+                    <span class="advanced-box-value" id="stat-win-streak">-</span>
+                </div>
+                <div class="advanced-box highlight-red">
+                    <span class="advanced-box-label">❄️ Série de pertes max</span>
+                    <span class="advanced-box-value" id="stat-loss-streak">-</span>
+                </div>
+                <div class="advanced-box highlight-gold">
+                    <span class="advanced-box-label">⚡ Facteur Récupération</span>
+                    <span class="advanced-box-value" id="stat-recovery-factor">-</span>
+                </div>
+                <div class="advanced-box highlight-gold">
+                    <span class="advanced-box-label">📐 Espérance Mathématique</span>
+                    <span class="advanced-box-value" id="stat-expectancy">-</span>
+                </div>
             </div>
         </div>
     </div>
@@ -1239,7 +1439,7 @@
 
             document.getElementById('chart-max-equity').innerText = `Sommet : ${Math.max(...equityPoints.map(p => p.balance)).toLocaleString('fr-FR', {maximumFractionDigits: 0})} $`;
 
-            // 3. Render Monthly Performance Table
+            // 3. Render Monthly Performance Cards
             const sortedMonthKeys = Object.keys(monthlyData).sort();
             const tableMonthlyBody = document.getElementById('table-monthly-body');
             tableMonthlyBody.innerHTML = '';
@@ -1252,57 +1452,98 @@
                 const yieldPct = (group.pnl / STARTING_BALANCE) * 100;
                 const compoundPct = startBal > 0 ? (group.pnl / startBal) * 100 : 0;
 
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="text-bold">${group.label}</td>
-                    <td class="text-bold ${group.pnl >= 0 ? 'text-green' : 'text-red'}">${group.pnl >= 0 ? '+' : ''}${group.pnl.toLocaleString('fr-FR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} $</td>
-                    <td class="${group.pnl >= 0 ? 'text-green' : 'text-red'}">${group.pnl >= 0 ? '+' : ''}${yieldPct.toFixed(2)}%</td>
-                    <td class="${group.pnl >= 0 ? 'text-green' : 'text-red'}">${group.pnl >= 0 ? '+' : ''}${compoundPct.toFixed(2)}%</td>
-                    <td>${group.count}</td>
-                    <td class="text-bold">${endBal.toLocaleString('fr-FR', {minimumFractionDigits: 0, maximumFractionDigits: 0})} $</td>
+                const card = document.createElement('div');
+                card.className = 'monthly-card ' + (group.pnl >= 0 ? 'positive' : 'negative');
+                
+                const pnlClass = group.pnl >= 0 ? 'text-green' : 'text-red';
+                const pnlPrefix = group.pnl >= 0 ? '+' : '';
+                
+                card.innerHTML = `
+                    <div class="monthly-header">${group.label}</div>
+                    <div class="monthly-pnl ${pnlClass}">${pnlPrefix}${group.pnl.toLocaleString('fr-FR', {minimumFractionDigits: 0, maximumFractionDigits: 0})} $</div>
+                    <div class="monthly-sub">
+                        <span>Rend. brut</span>
+                        <span class="${pnlClass}">${pnlPrefix}${yieldPct.toFixed(1)}%</span>
+                    </div>
+                    <div class="monthly-sub" style="margin-bottom: 4px;">
+                        <span>Rend. comp.</span>
+                        <span class="${pnlClass}">${pnlPrefix}${compoundPct.toFixed(1)}%</span>
+                    </div>
+                    <div class="monthly-badge">${group.count} trades</div>
                 `;
-                tableMonthlyBody.appendChild(tr);
+                tableMonthlyBody.appendChild(card);
                 accumBal = endBal;
             });
 
-            // 4. Render Strategy Table
+            // 4. Render Strategy Cards Grid
             const tableStrategyBody = document.getElementById('table-strategy-body');
             tableStrategyBody.innerHTML = '';
             Object.keys(stratStats).forEach(sKey => {
                 const s = stratStats[sKey];
                 const sWinRate = (s.wins + s.losses) > 0 ? (s.wins / (s.wins + s.losses)) * 100 : 0;
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="text-bold">${s.label}</td>
-                    <td>${s.asset}</td>
-                    <td>${s.count}</td>
-                    <td>${s.wins}</td>
-                    <td>${s.be}</td>
-                    <td>${s.losses}</td>
-                    <td class="text-bold ${s.pnl >= 0 ? 'text-green' : 'text-red'}">${s.pnl >= 0 ? '+' : ''}${s.pnl.toLocaleString('fr-FR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} $</td>
-                    <td class="text-bold">${sWinRate.toFixed(1)}%</td>
+                
+                const card = document.createElement('div');
+                card.className = 'strategy-card';
+                
+                const pnlClass = s.pnl >= 0 ? 'text-green' : 'text-red';
+                const pnlPrefix = s.pnl >= 0 ? '+' : '';
+                
+                card.innerHTML = `
+                    <div class="strategy-card-header">
+                        <div class="strategy-card-title">
+                            <span>${s.label}</span>
+                            <span style="font-size: 10px; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 4px;">${s.asset}</span>
+                        </div>
+                        <div class="strategy-card-pnl ${pnlClass}">
+                            ${pnlPrefix}${s.pnl.toLocaleString('fr-FR', {minimumFractionDigits: 0, maximumFractionDigits: 0})} $
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display:flex; justify-content:space-between; font-size:10px; margin-bottom: 4px; color:var(--text-secondary);">
+                            <span>Taux de Réussite (Win Rate)</span>
+                            <span class="text-bold" style="color:#ffffff;">${sWinRate.toFixed(1)}%</span>
+                        </div>
+                        <div class="infographic-bar-container">
+                            <div class="infographic-bar-fill" style="width: ${sWinRate}%; background: linear-gradient(90deg, #3b82f6, ${sWinRate >= 50 ? 'var(--accent-green)' : '#f59e0b'});"></div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px; font-size: 10px;">
+                        <span style="background: rgba(16, 185, 129, 0.1); color: var(--accent-green); padding: 3px 8px; border-radius: 6px; border: 1px solid rgba(16, 185, 129, 0.2); font-weight: 700;">W: ${s.wins}</span>
+                        <span style="background: rgba(255, 255, 255, 0.05); color: var(--text-secondary); padding: 3px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); font-weight: 700;">BE: ${s.be}</span>
+                        <span style="background: rgba(239, 68, 68, 0.1); color: var(--accent-red); padding: 3px 8px; border-radius: 6px; border: 1px solid rgba(239, 68, 68, 0.2); font-weight: 700;">L: ${s.losses}</span>
+                        <span style="margin-left: auto; color: var(--text-secondary); align-self: center;">${s.count} trades</span>
+                    </div>
                 `;
-                tableStrategyBody.appendChild(tr);
+                tableStrategyBody.appendChild(card);
             });
 
-            // 5. Render Weekdays Table
+            // 5. Render Weekdays Infographics
             const tableWeekdayBody = document.getElementById('table-weekday-body');
             tableWeekdayBody.innerHTML = '';
             dailyStats.forEach((dayStat, idx) => {
                 const dayWinRate = (dayStat.wins + dayStat.losses) > 0 ? (dayStat.wins / (dayStat.wins + dayStat.losses)) * 100 : 0;
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="text-bold">${dayNames[idx]}</td>
-                    <td>${dayStat.wins}</td>
-                    <td>${dayStat.losses}</td>
-                    <td>${dayStat.be}</td>
-                    <td class="text-bold">${dayWinRate.toFixed(1)}%</td>
-                    <td class="text-bold ${dayStat.pnl >= 0 ? 'text-green' : 'text-red'}">${dayStat.pnl >= 0 ? '+' : ''}${dayStat.pnl.toLocaleString('fr-FR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} $</td>
+                
+                const row = document.createElement('div');
+                row.className = 'infographic-row';
+                
+                const pnlClass = dayStat.pnl >= 0 ? 'text-green' : 'text-red';
+                const pnlPrefix = dayStat.pnl >= 0 ? '+' : '';
+                
+                row.innerHTML = `
+                    <div class="infographic-label">${dayNames[idx]}</div>
+                    <div class="infographic-bar-container">
+                        <div class="infographic-bar-fill" style="width: ${dayWinRate}%; background: linear-gradient(90deg, #6366f1, ${dayWinRate >= 50 ? '#10b981' : '#f59e0b'});"></div>
+                    </div>
+                    <div class="infographic-stats">
+                        <span class="infographic-wr">${dayWinRate.toFixed(0)}% WR</span>
+                        <span style="font-size:9px; color:var(--text-secondary);">(${dayStat.wins}W/${dayStat.losses}L)</span>
+                        <span class="infographic-pnl ${pnlClass}">${pnlPrefix}${dayStat.pnl.toLocaleString('fr-FR', {minimumFractionDigits: 0, maximumFractionDigits: 0})} $</span>
+                    </div>
                 `;
-                tableWeekdayBody.appendChild(tr);
+                tableWeekdayBody.appendChild(row);
             });
 
-            // 6. Render Hourly Table
+            // 6. Render Hourly Infographics
             const tableHourlyBody = document.getElementById('table-hourly-body');
             tableHourlyBody.innerHTML = '';
             for (let h = 0; h < 24; h++) {
@@ -1311,16 +1552,25 @@
                 if (totalH === 0) continue; // Skip hours with no trades
 
                 const hWinRate = (hourStat.wins + hourStat.losses) > 0 ? (hourStat.wins / (hourStat.wins + hourStat.losses)) * 100 : 0;
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="text-bold">${String(h).padStart(2, '0')}h</td>
-                    <td>${hourStat.wins}</td>
-                    <td>${hourStat.losses}</td>
-                    <td>${hourStat.be}</td>
-                    <td class="text-bold">${hWinRate.toFixed(1)}%</td>
-                    <td class="text-bold ${hourStat.pnl >= 0 ? 'text-green' : 'text-red'}">${hourStat.pnl >= 0 ? '+' : ''}${hourStat.pnl.toLocaleString('fr-FR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} $</td>
+                
+                const row = document.createElement('div');
+                row.className = 'infographic-row';
+                
+                const pnlClass = hourStat.pnl >= 0 ? 'text-green' : 'text-red';
+                const pnlPrefix = hourStat.pnl >= 0 ? '+' : '';
+                
+                row.innerHTML = `
+                    <div class="infographic-label">${String(h).padStart(2, '0')}h00</div>
+                    <div class="infographic-bar-container">
+                        <div class="infographic-bar-fill" style="width: ${hWinRate}%; background: linear-gradient(90deg, #0ea5e9, ${hWinRate >= 50 ? '#10b981' : '#f59e0b'});"></div>
+                    </div>
+                    <div class="infographic-stats">
+                        <span class="infographic-wr">${hWinRate.toFixed(0)}% WR</span>
+                        <span style="font-size:9px; color:var(--text-secondary);">(${hourStat.wins}W/${hourStat.losses}L)</span>
+                        <span class="infographic-pnl ${pnlClass}">${pnlPrefix}${hourStat.pnl.toLocaleString('fr-FR', {minimumFractionDigits: 0, maximumFractionDigits: 0})} $</span>
+                    </div>
                 `;
-                tableHourlyBody.appendChild(tr);
+                tableHourlyBody.appendChild(row);
             }
 
             // 7. Overlaps & Collisions calculations

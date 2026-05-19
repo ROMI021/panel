@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Control Panel - Graphiques et Analyses Élite</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(17, 24, 39, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.06);
+            --text-main: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-gold: #f59e0b;
+            --accent-purple: #a855f7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.08) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            padding: 16px;
+            min-height: 100vh;
+        }
+
+        /* Glassmorphic Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Tabs Navigation */
+        .nav-tabs {
+            display: flex;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 20px;
+            gap: 4px;
+        }
+
+        .nav-tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .nav-tab:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .nav-tab.active {
+            color: #000000;
+            background: linear-gradient(135deg, var(--accent-gold) 0%, #d97706 100%);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);
+            font-weight: 700;
+        }
+
+        /* Header logo area */
+        .header {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            font-size: 28px;
+            background: linear-gradient(135deg, var(--accent-gold) 0%, #e0a96d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .title {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .subtitle {
+            font-size: 10px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* Date Preset buttons */
+        .preset-group {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 20px;
+        }
+
+        .preset-btn {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            padding: 8px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .preset-btn:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: #ffffff;
+        }
+
+        .preset-btn.active {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--accent-blue);
+            color: #ffffff;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.15);
+        }
+
+        /* Charts Grid Layout */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        @media (min-width: 1024px) {
+            .charts-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .full-width-chart {
+                grid-column: span 2;
+            }
+        }
+
+        /* Glassmorphic Chart Card */
+        .chart-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 16px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-height: 320px;
+        }
+
+        .chart-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chart-card-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chart-card-title i {
+            color: var(--accent-gold);
+        }
+
+        .chart-canvas-container {
+            position: relative;
+            flex-grow: 1;
+            width: 100%;
+            height: 240px;
+        }
+
+        /* Summary bar in header */
+        .summary-bar {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 10px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 12px;
+        }
+
+        .summary-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .summary-label {
+            color: var(--text-secondary);
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .summary-value {
+            font-weight: 800;
+            font-size: 13px;
+        }
+
+        .text-green { color: var(--accent-green); }
+        .text-red { color: var(--accent-red); }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Top Tabs Navigation -->
+        <div class="nav-tabs">
+            <a id="nav-live" href="index.html" class="nav-tab">
+                <i class="fa-solid fa-gauge-high"></i> Live Monitor
+            </a>
+            <a id="nav-backtest" href="backtest.html" class="nav-tab">
+                <i class="fa-solid fa-chart-line"></i> Backtests Élite
+            </a>
+            <div id="nav-analytics" class="nav-tab active">
+                <i class="fa-solid fa-chart-pie"></i> Analyses Graphiques
+            </div>
+        </div>
+
+        <!-- Header -->
+        <div class="header">
+            <div class="logo-area">
+                <i class="fa-solid fa-chart-pie logo-icon"></i>
+                <div>
+                    <h1 class="title">Analyses Graphiques Élite</h1>
+                    <p class="subtitle">Analyse multi-stratégies interactive</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Date Presets -->
+        <div class="preset-group">
+            <button class="preset-btn" data-months="3">3 Mois</button>
+            <button class="preset-btn" data-months="6">6 Mois</button>
+            <button class="preset-btn" data-months="12">1 An</button>
+            <button class="preset-btn active" data-months="max">Période Max</button>
+        </div>
+
+        <!-- Summary Bar -->
+        <div class="summary-bar">
+            <div class="summary-item">
+                <span class="summary-label">Profit Net</span>
+                <span class="summary-value text-green" id="sum-net-profit">-</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">Max Drawdown</span>
+                <span class="summary-value text-red" id="sum-max-dd">-</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">Taux de Réussite</span>
+                <span class="summary-value" id="sum-win-rate">-</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">Facteur de Profit</span>
+                <span class="summary-value" id="sum-profit-factor">-</span>
+            </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="charts-grid">
+            <!-- 1. Full-Width Equity Area Chart -->
+            <div class="chart-card full-width-chart">
+                <div class="chart-card-header">
+                    <span class="chart-card-title"><i class="fa-solid fa-chart-area"></i> 📈 Courbe d'Équité & Drawdown Dynamique</span>
+                </div>
+                <div class="chart-canvas-container">
+                    <canvas id="chart-equity"></canvas>
+                </div>
+            </div>
+
+            <!-- 2. Strategy Profit Breakdown (Doughnut) -->
+            <div class="chart-card">
+                <div class="chart-card-header">
+                    <span class="chart-card-title"><i class="fa-solid fa-chart-pie"></i> 🍩 Répartition des Profits Net ($)</span>
+                </div>
+                <div class="chart-canvas-container">
+                    <canvas id="chart-strategy-pnl"></canvas>
+                </div>
+            </div>
+
+            <!-- 3. Strategy Win Rate vs Count (Grouped Bar) -->
+            <div class="chart-card">
+                <div class="chart-card-header">
+                    <span class="chart-card-title"><i class="fa-solid fa-chart-bar"></i> 📊 Taux de Réussite vs Volume</span>
+                </div>
+                <div class="chart-canvas-container">
+                    <canvas id="chart-strategy-wr"></canvas>
+                </div>
+            </div>
+
+            <!-- 4. Monthly Performance Bar Chart -->
+            <div class="chart-card">
+                <div class="chart-card-header">
+                    <span class="chart-card-title"><i class="fa-solid fa-calendar-alt"></i> 🗓️ Histogramme des Performances Mensuelles</span>
+                </div>
+                <div class="chart-canvas-container">
+                    <canvas id="chart-monthly"></canvas>
+                </div>
+            </div>
+
+            <!-- 5. Weekday Performance Horizontal Bar Chart -->
+            <div class="chart-card">
+                <div class="chart-card-header">
+                    <span class="chart-card-title"><i class="fa-solid fa-calendar-day"></i> 📅 Performance par Jour de la Semaine</span>
+                </div>
+                <div class="chart-canvas-container">
+                    <canvas id="chart-weekday"></canvas>
+                </div>
+            </div>
+
+            <!-- 6. Hourly Radar Chart -->
+            <div class="chart-card full-width-chart" style="min-height: 400px;">
+                <div class="chart-card-header">
+                    <span class="chart-card-title"><i class="fa-solid fa-clock"></i> 🕒 Radar de Performance par Heure (Heure Serveur MT5)</span>
+                </div>
+                <div class="chart-canvas-container" style="height: 320px;">
+                    <canvas id="chart-hourly"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data scripts -->
+    <script src="strategy_config.js"></script>
+    <script src="trades_data.js"></script>
+
+    <script>
+        const STARTING_BALANCE = 10000.00;
+        let chartInstances = {};
+
+        // Day and Month translation maps
+        const dayNames = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"];
+        const monthFrench = {
+            1: "Janvier", 2: "Février", 3: "Mars", 4: "Avril", 5: "Mai", 6: "Juin",
+            7: "Juillet", 8: "Août", 9: "Septembre", 10: "Octobre", 11: "Novembre", 12: "Décembre"
+        };
+
+        // Initialize preset buttons
+        const presetBtns = document.querySelectorAll('.preset-btn');
+        presetBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                presetBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const monthsAttr = btn.getAttribute('data-months');
+                runAnalysis(monthsAttr);
+            });
+        });
+
+        // Main initial setup
+        window.addEventListener('DOMContentLoaded', () => {
+            if (typeof TRADES_DATA === 'undefined') {
+                alert("Données trades_data.js introuvables ! Exécutez le pipeline de backtest pour générer la WebApp.");
+                return;
+            }
+            runAnalysis("max");
+        });
+
+        function runAnalysis(monthsPreset) {
+            // 1. Filter trades by period
+            let tradesSortedExit = TRADES_DATA.slice().sort((a, b) => a.x.localeCompare(b.x));
+            if (tradesSortedExit.length === 0) return;
+
+            const maxDate = new Date(tradesSortedExit[tradesSortedExit.length - 1].x);
+            let startDate = null;
+
+            if (monthsPreset !== "max") {
+                const monthsLimit = parseInt(monthsPreset);
+                startDate = new Date(maxDate);
+                startDate.setMonth(startDate.getMonth() - monthsLimit);
+            }
+
+            const filteredTrades = tradesSortedExit.filter(t => {
+                if (!startDate) return true;
+                const d = new Date(t.x);
+                return d >= startDate;
+            });
+
+            // Sort sequence for entry/exit details
+            const tradesSortedEntry = filteredTrades.slice().sort((a, b) => a.e.localeCompare(b.e));
+
+            // 2. Parse statistics & metrics
+            let equity = STARTING_BALANCE;
+            let maxEquity = STARTING_BALANCE;
+            let maxDDVal = 0;
+            let maxDDPct = 0;
+
+            let totalWins = 0;
+            let totalLosses = 0;
+            let totalBE = 0;
+            let grossProfit = 0;
+            let grossLoss = 0;
+
+            const equityPoints = [{ time: filteredTrades.length > 0 ? filteredTrades[0].e : 'Départ', balance: STARTING_BALANCE, dd: 0 }];
+
+            // Monthly breakdown group
+            const monthlyData = {};
+            // Strategy grouping
+            const stratStats = {};
+            if (typeof STRATEGY_CONFIG !== 'undefined' && STRATEGY_CONFIG.strategies) {
+                STRATEGY_CONFIG.strategies.forEach(s => {
+                    stratStats[s.key] = { label: s.name, asset: s.asset, count: 0, wins: 0, losses: 0, be: 0, pnl: 0 };
+                });
+            }
+
+            // Daily Stats
+            const dailyStats = Array.from({ length: 5 }, () => ({ wins: 0, losses: 0, be: 0, pnl: 0 }));
+            // Hourly Stats
+            const hourlyStats = Array.from({ length: 24 }, () => ({ wins: 0, losses: 0, be: 0, pnl: 0 }));
+
+            filteredTrades.forEach(t => {
+                const pnl = t.p;
+                equity += pnl;
+                if (equity > maxEquity) maxEquity = equity;
+                const dd = maxEquity - equity;
+                const ddPct = (dd / maxEquity) * 100;
+                if (dd > maxDDVal) maxDDVal = dd;
+                if (ddPct > maxDDPct) maxDDPct = ddPct;
+
+                equityPoints.push({ time: t.x, balance: equity, dd: dd });
+
+                if (pnl > 0) {
+                    totalWins++;
+                    grossProfit += pnl;
+                } else if (pnl < 0) {
+                    totalLosses++;
+                    grossLoss += Math.abs(pnl);
+                } else {
+                    totalBE++;
+                }
+
+                // Monthly grouping
+                const exitDateObj = new Date(t.x);
+                const mKey = `${exitDateObj.getFullYear()}-${String(exitDateObj.getMonth() + 1).padStart(2, '0')}`;
+                if (!monthlyData[mKey]) {
+                    monthlyData[mKey] = { pnl: 0, count: 0, label: `${monthFrench[exitDateObj.getMonth() + 1]} ${exitDateObj.getFullYear()}` };
+                }
+                monthlyData[mKey].pnl += pnl;
+                monthlyData[mKey].count++;
+
+                // Strategy grouping
+                const sKey = t.s.toLowerCase();
+                if (!stratStats[sKey]) {
+                    stratStats[sKey] = { label: t.s, asset: '', count: 0, wins: 0, losses: 0, be: 0, pnl: 0 };
+                }
+                stratStats[sKey].count++;
+                if (t.r === 'WIN') stratStats[sKey].wins++;
+                else if (t.r === 'LOSS') stratStats[sKey].losses++;
+                else if (t.r === 'BE') stratStats[sKey].be++;
+                stratStats[sKey].pnl += pnl;
+            });
+
+            // Entry-based grouping for weekdays/hours
+            tradesSortedEntry.forEach(t => {
+                const entryDateObj = new Date(t.e);
+                const weekday = entryDateObj.getDay();
+                const hour = entryDateObj.getHours();
+
+                if (weekday !== 0 && weekday !== 6) {
+                    const idx = weekday - 1;
+                    if (t.r === 'WIN') dailyStats[idx].wins++;
+                    else if (t.r === 'LOSS') dailyStats[idx].losses++;
+                    else if (t.r === 'BE') dailyStats[idx].be++;
+                    dailyStats[idx].pnl += t.p;
+                }
+
+                if (t.r === 'WIN') hourlyStats[hour].wins++;
+                else if (t.r === 'LOSS') hourlyStats[hour].losses++;
+                else if (t.r === 'BE') hourlyStats[hour].be++;
+                hourlyStats[hour].pnl += t.p;
+            });
+
+            // Fill header indicators
+            const netProfit = equity - STARTING_BALANCE;
+            const netProfitPct = (netProfit / STARTING_BALANCE) * 100;
+            const winRate = (totalWins + totalLosses) > 0 ? (totalWins / (totalWins + totalLosses)) * 100 : 0;
+            const profitFactor = grossLoss > 0 ? grossProfit / grossLoss : (grossProfit > 0 ? Infinity : 0);
+
+            const sumProfitEl = document.getElementById('sum-net-profit');
+            sumProfitEl.innerText = `${netProfit >= 0 ? '+' : ''}${netProfit.toLocaleString('fr-FR', {maximumFractionDigits: 0})} $ (${netProfit >= 0 ? '+' : ''}${netProfitPct.toFixed(1)}%)`;
+            sumProfitEl.className = `summary-value ${netProfit >= 0 ? 'text-green' : 'text-red'}`;
+
+            document.getElementById('sum-max-dd').innerText = `-${maxDDVal.toLocaleString('fr-FR', {maximumFractionDigits: 0})} $ (-${maxDDPct.toFixed(1)}%)`;
+            document.getElementById('sum-win-rate').innerText = `${winRate.toFixed(1)}%`;
+            document.getElementById('sum-profit-factor').innerText = profitFactor === Infinity ? '∞' : profitFactor.toFixed(2);
+
+            // 3. Render all Charts
+            renderEquityChart(equityPoints);
+            renderStrategyPnlChart(stratStats);
+            renderStrategyWinRateChart(stratStats);
+            renderMonthlyChart(monthlyData);
+            renderWeekdayChart(dailyStats);
+            renderHourlyChart(hourlyStats);
+        }
+
+        // Global Chart options helpers
+        const getChartDefaults = () => ({
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: { color: 'rgba(255, 255, 255, 0.7)', font: { family: 'Outfit', size: 10 } }
+                },
+                tooltip: {
+                    padding: 10,
+                    titleFont: { family: 'Outfit', size: 11, weight: 'bold' },
+                    bodyFont: { family: 'Outfit', size: 11 }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                    ticks: { color: 'rgba(255, 255, 255, 0.6)', font: { family: 'Outfit', size: 9 } }
+                },
+                y: {
+                    grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                    ticks: { color: 'rgba(255, 255, 255, 0.6)', font: { family: 'Outfit', size: 9 } }
+                }
+            }
+        });
+
+        function destroyChart(key) {
+            if (chartInstances[key]) {
+                chartInstances[key].destroy();
+            }
+        }
+
+        // 1. Chart Equity & Drawdown Area
+        function renderEquityChart(points) {
+            destroyChart('equity');
+            const ctx = document.getElementById('chart-equity').getContext('2d');
+
+            const labels = points.map((p, idx) => idx % Math.max(1, Math.round(points.length / 10)) === 0 ? p.time.split(' ')[0] : '');
+            const balances = points.map(p => p.balance);
+            const drawdowns = points.map(p => -p.dd);
+
+            const gradientBal = ctx.createLinearGradient(0, 0, 0, 240);
+            gradientBal.addColorStop(0, 'rgba(16, 185, 129, 0.2)');
+            gradientBal.addColorStop(1, 'rgba(16, 185, 129, 0)');
+
+            const gradientDD = ctx.createLinearGradient(0, 0, 0, 240);
+            gradientDD.addColorStop(0, 'rgba(239, 68, 68, 0)');
+            gradientDD.addColorStop(1, 'rgba(239, 68, 68, 0.15)');
+
+            chartInstances['equity'] = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Équité ($)',
+                            data: balances,
+                            borderColor: '#10b981',
+                            borderWidth: 2,
+                            backgroundColor: gradientBal,
+                            fill: true,
+                            tension: 0.2,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Drawdown ($)',
+                            data: drawdowns,
+                            borderColor: '#ef4444',
+                            borderWidth: 1.5,
+                            borderDash: [3, 3],
+                            backgroundColor: gradientDD,
+                            fill: true,
+                            tension: 0.2,
+                            yAxisID: 'yDD'
+                        }
+                    ]
+                },
+                options: {
+                    ...getChartDefaults(),
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(255, 255, 255, 0.04)' },
+                            ticks: { color: 'rgba(255, 255, 255, 0.5)', maxRotation: 0, font: { family: 'Outfit', size: 9 } }
+                        },
+                        y: {
+                            position: 'left',
+                            grid: { color: 'rgba(255, 255, 255, 0.04)' },
+                            ticks: { color: '#10b981', font: { family: 'Outfit', size: 9 } }
+                        },
+                        yDD: {
+                            position: 'right',
+                            grid: { drawOnChartArea: false },
+                            ticks: { color: '#ef4444', font: { family: 'Outfit', size: 9 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 2. Doughnut Strategy profit breakdown
+        function renderStrategyPnlChart(stats) {
+            destroyChart('strategyPnl');
+            const ctx = document.getElementById('chart-strategy-pnl').getContext('2d');
+
+            const labels = [];
+            const data = [];
+            const colors = ['#3b82f6', '#f59e0b', '#10b981', '#a855f7', '#06b6d4', '#ec4899'];
+
+            Object.keys(stats).forEach(k => {
+                labels.push(stats[k].label);
+                data.push(Math.max(0, stats[k].pnl)); // Plot positive contributions
+            });
+
+            chartInstances['strategyPnl'] = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors.slice(0, labels.length),
+                        borderWidth: 1.5,
+                        borderColor: '#0b0f19'
+                    }]
+                },
+                options: {
+                    ...getChartDefaults(),
+                    plugins: {
+                        ...getChartDefaults().plugins,
+                        legend: {
+                            position: 'right',
+                            labels: { color: 'rgba(255, 255, 255, 0.8)', font: { family: 'Outfit', size: 10 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 3. Double Bar Strategy WR & Volume
+        function renderStrategyWinRateChart(stats) {
+            destroyChart('strategyWr');
+            const ctx = document.getElementById('chart-strategy-wr').getContext('2d');
+
+            const labels = [];
+            const winRates = [];
+            const counts = [];
+
+            Object.keys(stats).forEach(k => {
+                const s = stats[k];
+                const wr = (s.wins + s.losses) > 0 ? (s.wins / (s.wins + s.losses)) * 100 : 0;
+                labels.push(s.label);
+                winRates.push(wr);
+                counts.push(s.count);
+            });
+
+            chartInstances['strategyWr'] = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Taux de Réussite (%)',
+                            data: winRates,
+                            backgroundColor: 'rgba(16, 185, 129, 0.75)',
+                            borderColor: '#10b981',
+                            borderWidth: 1,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Volume de Trades',
+                            data: counts,
+                            backgroundColor: 'rgba(59, 130, 246, 0.75)',
+                            borderColor: '#3b82f6',
+                            borderWidth: 1,
+                            yAxisID: 'yVol'
+                        }
+                    ]
+                },
+                options: {
+                    ...getChartDefaults(),
+                    scales: {
+                        x: { grid: { color: 'rgba(255, 255, 255, 0.04)' }, ticks: { color: 'rgba(255, 255, 255, 0.7)', font: { family: 'Outfit', size: 9 } } },
+                        y: { position: 'left', ticks: { callback: v => `${v}%`, color: '#10b981' } },
+                        yVol: { position: 'right', grid: { drawOnChartArea: false }, ticks: { color: '#3b82f6' } }
+                    }
+                }
+            });
+        }
+
+        // 4. Monthly Performance
+        function renderMonthlyChart(monthlyData) {
+            destroyChart('monthly');
+            const ctx = document.getElementById('chart-monthly').getContext('2d');
+
+            const sortedKeys = Object.keys(monthlyData).sort();
+            const labels = sortedKeys.map(k => monthlyData[k].label);
+            const pnls = sortedKeys.map(k => monthlyData[k].pnl);
+            const colors = pnls.map(p => p >= 0 ? 'rgba(16, 185, 129, 0.8)' : 'rgba(239, 68, 68, 0.8)');
+
+            chartInstances['monthly'] = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'PnL ($)',
+                        data: pnls,
+                        backgroundColor: colors,
+                        borderWidth: 1,
+                        borderColor: pnls.map(p => p >= 0 ? '#10b981' : '#ef4444')
+                    }]
+                },
+                options: {
+                    ...getChartDefaults(),
+                    scales: {
+                        x: { grid: { color: 'rgba(255, 255, 255, 0.04)' } },
+                        y: { grid: { color: 'rgba(255, 255, 255, 0.04)' } }
+                    }
+                }
+            });
+        }
+
+        // 5. Weekday Performance horizontal
+        function renderWeekdayChart(dailyStats) {
+            destroyChart('weekday');
+            const ctx = document.getElementById('chart-weekday').getContext('2d');
+
+            const pnls = dailyStats.map(s => s.pnl);
+            const colors = pnls.map(p => p >= 0 ? 'rgba(16, 185, 129, 0.8)' : 'rgba(239, 68, 68, 0.8)');
+
+            chartInstances['weekday'] = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: dayNames,
+                    datasets: [{
+                        label: 'Gain / Perte ($)',
+                        data: pnls,
+                        backgroundColor: colors,
+                        borderWidth: 1,
+                        borderColor: pnls.map(p => p >= 0 ? '#10b981' : '#ef4444')
+                    }]
+                },
+                options: {
+                    ...getChartDefaults(),
+                    indexAxis: 'y',
+                    scales: {
+                        x: { grid: { color: 'rgba(255, 255, 255, 0.04)' } },
+                        y: { grid: { drawOnChartArea: false } }
+                    }
+                }
+            });
+        }
+
+        // 6. Hourly Radar Chart
+        function renderHourlyChart(hourlyStats) {
+            destroyChart('hourly');
+            const ctx = document.getElementById('chart-hourly').getContext('2d');
+
+            const labels = Array.from({ length: 24 }, (_, i) => `${String(i).padStart(2, '0')}h`);
+            const pnls = hourlyStats.map(s => s.pnl);
+
+            chartInstances['hourly'] = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'PnL par tranche horaire ($)',
+                        data: pnls,
+                        backgroundColor: 'rgba(59, 130, 246, 0.15)',
+                        borderColor: '#3b82f6',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#3b82f6',
+                        pointBorderColor: '#ffffff',
+                        pointHoverBackgroundColor: '#ffffff',
+                        pointHoverBorderColor: '#3b82f6'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: 'rgba(255, 255, 255, 0.8)', font: { family: 'Outfit', size: 11 } } }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(255, 255, 255, 0.06)' },
+                            grid: { color: 'rgba(255, 255, 255, 0.06)' },
+                            pointLabels: { color: 'rgba(255, 255, 255, 0.6)', font: { family: 'Outfit', size: 9 } },
+                            ticks: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
