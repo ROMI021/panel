@@ -413,8 +413,8 @@
             let tradesSortedExit = ALL_TRADES.slice().sort((a, b) => a.x.localeCompare(b.x));
             if (tradesSortedExit.length === 0) return;
 
-            const maxDate = new Date(tradesSortedExit[tradesSortedExit.length - 1].x);
-            let startDate = null;
+            const maxDate = new Date("2026-05-15 23:59:59");
+            let startDate = new Date("2023-11-01 00:00:00");
 
             if (monthsPreset !== "max") {
                 const monthsLimit = parseInt(monthsPreset);
@@ -423,9 +423,8 @@
             }
 
             const filteredTrades = tradesSortedExit.filter(t => {
-                if (!startDate) return true;
                 const d = new Date(t.x);
-                return d >= startDate;
+                return d >= startDate && d <= maxDate;
             });
 
             // Sort sequence for entry/exit details
