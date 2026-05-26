@@ -1,9 +1,16 @@
 /**
  * Master Control Panel — logique UI (heure serveur MT5 via URL).
  */
-(function () {
-    Telegram.WebApp.ready();
-    Telegram.WebApp.expand();
+document.addEventListener('DOMContentLoaded', function () {
+    // Initialiser Telegram WebApp de façon défensive
+    try {
+        if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
+            Telegram.WebApp.ready();
+            Telegram.WebApp.expand();
+        }
+    } catch (e) {
+        console.warn('Telegram WebApp SDK not available:', e);
+    }
 
     const params = new URLSearchParams(window.location.search);
     const balance = parseFloat(params.get('balance') || '10000');
@@ -29,29 +36,37 @@
     const mon = params.get('monitor') || '0';
     const sup = params.get('supervisor') || '0';
 
-    document.getElementById('val-balance').innerText =
-        balance.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' $';
-    document.getElementById('val-equity').innerText =
-        equity.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' $';
+    const _el = (id) => document.getElementById(id);
 
-    const pnlEl = document.getElementById('val-pnl');
-    const pnlFmt = Math.abs(pnl).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    if (pnl >= 0) {
-        pnlEl.innerText = '+' + pnlFmt + ' $';
-        pnlEl.className = 'circle-pnl-value pnl-positive';
-    } else {
-        pnlEl.innerText = '-' + pnlFmt + ' $';
-        pnlEl.className = 'circle-pnl-value pnl-negative';
+    if (_el('val-balance'))
+        _el('val-balance').innerText =
+            balance.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' $';
+    if (_el('val-equity'))
+        _el('val-equity').innerText =
+            equity.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' $';
+
+    const pnlEl = _el('val-pnl');
+    if (pnlEl) {
+        const pnlFmt = Math.abs(pnl).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        if (pnl >= 0) {
+            pnlEl.innerText = '+' + pnlFmt + ' $';
+            pnlEl.className = 'circle-pnl-value pnl-positive';
+        } else {
+            pnlEl.innerText = '-' + pnlFmt + ' $';
+            pnlEl.className = 'circle-pnl-value pnl-negative';
+        }
     }
 
-    const circle = document.getElementById('progress-circle');
-    const percent = Math.min(100, Math.max(0, (pnl / ftmoTarget) * 100));
-    circle.setAttribute('stroke-dashoffset', String(377 - (percent / 100) * 377));
-    if (pnl < 0) circle.setAttribute('stroke', 'var(--accent-red)');
+    const circle = _el('progress-circle');
+    if (circle) {
+        const percent = Math.min(100, Math.max(0, (pnl / ftmoTarget) * 100));
+        circle.setAttribute('stroke-dashoffset', String(377 - (percent / 100) * 377));
+        if (pnl < 0) circle.setAttribute('stroke', 'var(--accent-red)');
+    }
 
     const setDot = (id, active) => {
-        const el = document.getElementById(id);
-        el.className = active ? 'process-dot dot-green' : 'process-dot dot-red';
+        const el = _el(id);
+        if (el) el.className = active ? 'process-dot dot-green' : 'process-dot dot-red';
     };
     setDot('dot-nas100', procActive(nas));
     setDot('dot-xauusd', procActive(xau));
@@ -60,18 +75,20 @@
     setDot('dot-monitor', procActive(mon));
     setDot('dot-supervisor', procActive(sup));
 
-    const slotEl = document.getElementById('xau-slot-status');
-    if (xauSlot === 'free') {
-        slotEl.innerHTML = '<span style="color:var(--accent-green)">Slot libre</span> — les deux bots or peuvent entrer au prochain signal.';
-    } else if (xauSlot === 'xauusd') {
-        slotEl.innerHTML = `<span style="color:var(--accent-gold)">Occupé par XAUUSD SMC</span>${xauDetail ? ' (' + xauDetail + ')' : ''}`;
-    } else if (xauSlot === 'gold') {
-        slotEl.innerHTML = `<span style="color:var(--accent-gold)">Occupé par Gold Trend</span>${xauDetail ? ' (' + xauDetail + ')' : ''}`;
-    } else {
-        slotEl.innerHTML = '<span style="color:var(--accent-red)">Position or active</span>';
+    const slotEl = _el('xau-slot-status');
+    if (slotEl) {
+        if (xauSlot === 'free') {
+            slotEl.innerHTML = '<span style="color:var(--accent-green)">Slot libre</span> \u2014 les deux bots or peuvent entrer au prochain signal.';
+        } else if (xauSlot === 'xauusd') {
+            slotEl.innerHTML = `<span style="color:var(--accent-gold)">Occup\u00e9 par XAUUSD SMC</span>${xauDetail ? ' (' + xauDetail + ')' : ''}`;
+        } else if (xauSlot === 'gold') {
+            slotEl.innerHTML = `<span style="color:var(--accent-gold)">Occup\u00e9 par Gold Trend</span>${xauDetail ? ' (' + xauDetail + ')' : ''}`;
+        } else {
+            slotEl.innerHTML = '<span style="color:var(--accent-red)">Position or active</span>';
+        }
     }
 
-    const riskGrid = document.getElementById('risk-ftmo-grid');
+    const riskGrid = _el('risk-ftmo-grid');
     const cfg = typeof STRATEGY_CONFIG !== 'undefined' ? STRATEGY_CONFIG : null;
     if (cfg && riskGrid) {
         const rows = Object.entries(cfg.strategies).map(([key, s]) =>
@@ -87,7 +104,7 @@
         if (!cfg) return;
         Object.keys(cfg.strategies).forEach((key) => {
             const s = cfg.strategies[key];
-            const wrap = document.getElementById('hours-badges-' + key);
+            const wrap = _el('hours-badges-' + key);
             if (wrap) {
                 wrap.innerHTML = '';
                 s.allowedHours.forEach((h) => {
@@ -98,25 +115,26 @@
                     wrap.appendChild(span);
                 });
             }
-            const toggle = document.getElementById('toggle-' + key);
+            const toggle = _el('toggle-' + key);
             const titleSpan = toggle && toggle.closest('details') && toggle.closest('details').querySelector('summary > div > span');
             if (titleSpan) titleSpan.innerText = (s.icon ? s.icon + ' ' : '') + s.label;
         });
     }
     renderHoursFromConfig();
 
-    const tradeContainer = document.getElementById('trade-history-container');
-    if (tradesParam) {
-        tradesParam.split(';').forEach((t) => {
-            const parts = t.split('|');
-            if (parts.length < 4) return;
-            const [symbol, type, volume, profitStr] = parts;
-            const profit = parseFloat(profitStr);
-            const profitClass = profit >= 0 ? 'metric-value pnl-positive' : 'metric-value pnl-negative';
-            const card = document.createElement('div');
-            card.className = 'process-card';
-            card.style.padding = '10px 12px';
-            card.innerHTML = `
+    const tradeContainer = _el('trade-history-container');
+    if (tradeContainer) {
+        if (tradesParam) {
+            tradesParam.split(';').forEach((t) => {
+                const parts = t.split('|');
+                if (parts.length < 4) return;
+                const [symbol, type, volume, profitStr] = parts;
+                const profit = parseFloat(profitStr);
+                const profitClass = profit >= 0 ? 'metric-value pnl-positive' : 'metric-value pnl-negative';
+                const card = document.createElement('div');
+                card.className = 'process-card';
+                card.style.padding = '10px 12px';
+                card.innerHTML = `
                 <div style="display:flex;align-items:center;gap:10px;">
                     <span class="process-dot ${type === 'BUY' ? 'dot-green' : 'dot-red'}"></span>
                     <div>
@@ -125,11 +143,12 @@
                     </div>
                 </div>
                 <span class="${profitClass}" style="font-size:14px;font-weight:700;">${profit >= 0 ? '+' : ''}${profit.toFixed(2)} $</span>`;
-            tradeContainer.appendChild(card);
-        });
-    } else {
-        tradeContainer.innerHTML =
-            '<div style="text-align:center;color:var(--text-secondary);font-size:11px;padding:12px;">Aucun trade clos (7 j)</div>';
+                tradeContainer.appendChild(card);
+            });
+        } else {
+            tradeContainer.innerHTML =
+                '<div style="text-align:center;color:var(--text-secondary);font-size:11px;padding:12px;">Aucun trade clos (7 j)</div>';
+        }
     }
 
     const bots = [
@@ -139,13 +158,15 @@
         { id: 'gold', active: procActive(gld) },
     ];
     bots.forEach((bot) => {
-        const toggle = document.getElementById('toggle-' + bot.id);
-        const badge = document.getElementById('badge-status-' + bot.id);
+        const toggle = _el('toggle-' + bot.id);
+        const badge = _el('badge-status-' + bot.id);
         if (toggle) {
             toggle.checked = bot.active;
             toggle.addEventListener('change', () => {
-                badge.innerText = toggle.checked ? 'ON' : 'OFF';
-                badge.className = toggle.checked ? 'process-badge active' : 'process-badge inactive';
+                if (badge) {
+                    badge.innerText = toggle.checked ? 'ON' : 'OFF';
+                    badge.className = toggle.checked ? 'process-badge active' : 'process-badge inactive';
+                }
             });
         }
         if (badge) {
@@ -154,27 +175,46 @@
         }
     });
 
-    document.getElementById('btn-cancel').addEventListener('click', () => Telegram.WebApp.close());
-    document.getElementById('nav-backtest').addEventListener('click', (e) => {
-        e.preventDefault();
-        window.location.href = 'backtest.html' + window.location.search;
-    });
-    document.getElementById('btn-apply').addEventListener('click', () => {
-        try {
-            Telegram.WebApp.sendData(JSON.stringify({
-                action: 'toggle_bots',
-                nas100: document.getElementById('toggle-nas100').checked,
-                xauusd: document.getElementById('toggle-xauusd').checked,
-                eurusd: document.getElementById('toggle-eurusd').checked,
-                gold: document.getElementById('toggle-gold').checked,
-            }));
-        } catch (err) {
-            alert('Ouvrez le panel via le bouton clavier en bas du chat pour appliquer les changements.');
-        }
-    });
+    const btnCancel = _el('btn-cancel');
+    if (btnCancel) {
+        btnCancel.addEventListener('click', () => {
+            try {
+                if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
+                    Telegram.WebApp.close();
+                }
+            } catch (e) {}
+        });
+    }
+
+    const navBacktest = _el('nav-backtest');
+    if (navBacktest) {
+        navBacktest.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = 'backtest.html' + window.location.search;
+        });
+    }
+
+    const btnApply = _el('btn-apply');
+    if (btnApply) {
+        btnApply.addEventListener('click', () => {
+            try {
+                if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
+                    Telegram.WebApp.sendData(JSON.stringify({
+                        action: 'toggle_bots',
+                        nas100: _el('toggle-nas100') ? _el('toggle-nas100').checked : false,
+                        xauusd: _el('toggle-xauusd') ? _el('toggle-xauusd').checked : false,
+                        eurusd: _el('toggle-eurusd') ? _el('toggle-eurusd').checked : false,
+                        gold: _el('toggle-gold') ? _el('toggle-gold').checked : false,
+                    }));
+                }
+            } catch (err) {
+                alert('Ouvrez le panel via le bouton clavier en bas du chat pour appliquer les changements.');
+            }
+        });
+    }
 
     function highlightServerHour() {
-        const clock = document.getElementById('server-clock-badge');
+        const clock = _el('server-clock-badge');
         if (serverHour >= 0 && clock) {
             clock.innerText = 'Serveur MT5 ' + String(serverHour).padStart(2, '0') + ':' + String(serverMin).padStart(2, '0');
         }
@@ -193,4 +233,4 @@
         });
     }
     highlightServerHour();
-})();
+});
